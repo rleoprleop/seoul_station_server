@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table(name="user_table")
-public class UserEntity extends BaceTimeEntity {
+public class UserEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
     private Long id;
