@@ -1,7 +1,6 @@
 package com.capstone.capstone.controller;
 
 import com.capstone.capstone.dto.UserDTO;
-import com.capstone.capstone.entity.UserEntity;
 import com.capstone.capstone.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,7 @@ public class UserController {
         // @ModelAttribute: html의 form태그로 오는 x-www-form-urlencoded 데이터 받기 가능,
         // @RequestBody: html의 form태그로 오는 x-www-form-urlencoded 데이터 받기 불가능, json형태로 받는게 좋음.
         System.out.println(userDTO);
-        userService.save(userDTO);
+        userService.signUp(userDTO);
     }
 
     @PostMapping("/sign-in")

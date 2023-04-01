@@ -13,7 +13,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public void save(UserDTO userDTO) {
+    public void signUp(UserDTO userDTO) { // 유저 회원가입
         // 1. dto -> entity 변환
         UserEntity userEntity = UserEntity.toUserEntity(userDTO);
         // 2. repository의 save 호출
