@@ -51,6 +51,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public UserResponseDTO passwordChange(UserPasswordChangeDTO userPasswordChangeDTO){
         Optional<UserEntity> byUserId = userRepository.findByUserId(userPasswordChangeDTO.getUserId());
 
@@ -59,7 +60,6 @@ public class UserService {
             if(userEntity.getUserPassword().equals(userPasswordChangeDTO.getUserPassword())){ // 비밀번호 일치
                 // userPassword를 newUserPassword로 DB업데이트
                 userEntity.setUserPassword(userPasswordChangeDTO.getNewUserPassword());
-                userRepository.save(userEntity);
                 // entity -> dto 변환 후 리턴
                 UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
                 return userResponseDTO;
