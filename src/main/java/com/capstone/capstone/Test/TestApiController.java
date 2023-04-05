@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +21,14 @@ public class TestApiController {
     @GetMapping("/test")
     public ResponseEntity<?> getTestInfo(@RequestParam Long id) throws Exception{
         TestResponse testResponse = testService.getTestInfo(id);
-        return  ResponseEntity.ok(testResponse);
+        TestCommonCode testCommonCode = TestCommonCode.builder()
+                .code(BizExceptionCode.NOT_FOUND_DATA.getCode())
+                .status(BizExceptionCode.NOT_FOUND_DATA.getStatus())
+                .message(BizExceptionCode.NOT_FOUND_DATA.getMessage()).build();
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", testResponse);
+        result.put("code", testCommonCode);
+        return  ResponseEntity.ok().body(result);
     }
 
 }

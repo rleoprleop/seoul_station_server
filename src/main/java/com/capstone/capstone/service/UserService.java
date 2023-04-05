@@ -51,7 +51,7 @@ public class UserService {
         }
     }
 
-    @Transactional
+    @Transactional // DB update
     public UserResponseDTO passwordChange(UserPasswordChangeDTO userPasswordChangeDTO){
         Optional<UserEntity> byUserId = userRepository.findByUserId(userPasswordChangeDTO.getUserId());
 

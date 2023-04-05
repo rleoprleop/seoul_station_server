@@ -23,10 +23,6 @@ public class UserResponseDTO {
                 .userName(userEntity.getUserName())
                 .userCreateDate(userEntity.getCreateDate())
                 .build();
-        /*UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(userEntity.getUserId());
-        userDTO.setUserPassword(userEntity.getUserPassword());
-        userDTO.setUserName(userEntity.getUserName());*/
         return userResponseDTO;
     }
 }
