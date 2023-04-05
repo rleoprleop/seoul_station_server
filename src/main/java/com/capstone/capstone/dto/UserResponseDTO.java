@@ -3,27 +3,30 @@ package com.capstone.capstone.dto;
 import com.capstone.capstone.entity.UserEntity;
 import lombok.*;
 
-@Getter
-@Setter
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@Data
 @Builder
-public class UserDTO {
+public class UserResponseDTO {
     private Long id;
-    private String userId;
-    private String userPassword;
     private String userName;
 
-    public static UserDTO toUserDTO(UserEntity userEntity) {
-        UserDTO userDTO = UserDTO.builder()
-                .userId(userEntity.getUserId())
+    private LocalDateTime userCreateDate;
+
+    public static UserResponseDTO toUserResponseDTO(UserEntity userEntity) {
+        UserResponseDTO userResponseDTO = UserResponseDTO.builder()
+                .id(userEntity.getId())
                 .userName(userEntity.getUserName())
-                .userPassword(userEntity.getUserPassword())
+                .userCreateDate(userEntity.getCreateDate())
                 .build();
         /*UserDTO userDTO = new UserDTO();
         userDTO.setUserId(userEntity.getUserId());
         userDTO.setUserPassword(userEntity.getUserPassword());
         userDTO.setUserName(userEntity.getUserName());*/
-        return userDTO;
+        return userResponseDTO;
     }
 }
