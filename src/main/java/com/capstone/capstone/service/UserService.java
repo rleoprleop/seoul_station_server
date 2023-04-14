@@ -1,8 +1,6 @@
 package com.capstone.capstone.service;
 
-import com.capstone.capstone.dto.UserDTO;
-import com.capstone.capstone.dto.UserPasswordChangeDTO;
-import com.capstone.capstone.dto.UserResponseDTO;
+import com.capstone.capstone.dto.*;
 import com.capstone.capstone.entity.UserEntity;
 import com.capstone.capstone.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -11,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -18,7 +18,8 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public UserResponseDTO signUp(UserDTO userDTO) { // 유저 회원가입
+    public Map<String,Object> signUp(UserDTO userDTO) { // 유저 회원가입
+        Map<String, Object> result = new HashMap<>();
         // 1. dto -> entity 변환
         UserEntity userEntity = UserEntity.toUserEntity(userDTO);
         // 2. repository의 save 호출
@@ -26,11 +27,13 @@ public class UserService {
 
         UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(save);
 
-        return  userResponseDTO;
+        result.put("data",userResponseDTO);
+        return  result;
     }
 
 
-    public UserResponseDTO signIn(UserDTO userDTO) {
+    public Map<String,Object> signIn(UserDTO userDTO) {
+        Map<String, Object> result = new HashMap<>();
         // 1. userId로 DB조회
         Optional<UserEntity> byUserId = userRepository.findByUserId(userDTO.getUserId());
 
@@ -40,19 +43,25 @@ public class UserService {
             if(userEntity.getUserPassword().equals(userDTO.getUserPassword())){ // 비밀번호 일치
                 // entity -> dto 변환 후 리턴
                 UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
-                return userResponseDTO;
+                result.put("data",userResponseDTO);
+                return result;
             }
             else{ // 비밀번호 불일치
-                return null;
+                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.ERROR_PASSWORD);
+                result.put("code",commonCodeDTO);
+                return result;
             }
         }
         else {// 조회 결과 X
-            return null;
+            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NOT_FOUND_USER_ID);
+            result.put("code",commonCodeDTO);
+            return result;
         }
     }
 
     @Transactional // DB update
-    public UserResponseDTO passwordChange(UserPasswordChangeDTO userPasswordChangeDTO){
+    public Map<String,Object> passwordChange(UserPasswordChangeDTO userPasswordChangeDTO){
+        Map<String, Object> result = new HashMap<>();
         Optional<UserEntity> byUserId = userRepository.findByUserId(userPasswordChangeDTO.getUserId());
 
         if(byUserId.isPresent()){// 조회 결과 O
@@ -62,7 +71,8 @@ public class UserService {
                 userEntity.setUserPassword(userPasswordChangeDTO.getNewUserPassword());
                 // entity -> dto 변환 후 리턴
                 UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
-                return userResponseDTO;
+                result.put("data",userResponseDTO);
+                return result;
             }
             else{ // 비밀번호 불일치
                 return null;
