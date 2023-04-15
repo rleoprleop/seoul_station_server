@@ -20,14 +20,28 @@ public class UserService {
 
     public Map<String,Object> signUp(UserDTO userDTO) { // 유저 회원가입
         Map<String, Object> result = new HashMap<>();
+        Optional<UserEntity> byUserId = userRepository.findByUserId(userDTO.getUserId());
+        Optional<UserEntity> byUserName = userRepository.findByUserName(userDTO.getUserName());
+
+        if(byUserId.isPresent()){//같은 userId 있을 경우
+            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SAME_USER_ID);
+            result.put("code",commonCodeDTO);
+            return result;
+        }
+        if(byUserName.isPresent()){//같은 userName 있을 경우
+            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SAME_USER_NAME);
+            result.put("code",commonCodeDTO);
+            return result;
+        }
         // 1. dto -> entity 변환
         UserEntity userEntity = UserEntity.toUserEntity(userDTO);
         // 2. repository의 save 호출
         UserEntity save = userRepository.save(userEntity);// entity 객체를 넘겨줘야 함
 
         UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(save);
-
+        CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_SIGN_UP);
         result.put("data",userResponseDTO);
+        result.put("code",commonCodeDTO);
         return  result;
     }
 
@@ -43,20 +57,20 @@ public class UserService {
             if(userEntity.getUserPassword().equals(userDTO.getUserPassword())){ // 비밀번호 일치
                 // entity -> dto 변환 후 리턴
                 UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
+                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_SIGN_IN);
                 result.put("data",userResponseDTO);
-                return result;
+                result.put("code",commonCodeDTO);
             }
             else{ // 비밀번호 불일치
                 CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.ERROR_PASSWORD);
                 result.put("code",commonCodeDTO);
-                return result;
             }
         }
         else {// 조회 결과 X
             CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NOT_FOUND_USER_ID);
             result.put("code",commonCodeDTO);
-            return result;
         }
+        return result;
     }
 
     @Transactional // DB update
@@ -71,7 +85,9 @@ public class UserService {
                 userEntity.setUserPassword(userPasswordChangeDTO.getNewUserPassword());
                 // entity -> dto 변환 후 리턴
                 UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
+                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_PASSWORD_CHANGE);
                 result.put("data",userResponseDTO);
+                result.put("code",commonCodeDTO);
                 return result;
             }
             else{ // 비밀번호 불일치
