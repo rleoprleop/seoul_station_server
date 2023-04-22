@@ -1,6 +1,7 @@
 package com.capstone.capstone.controller;
 
 import com.capstone.capstone.dto.UserDTO;
+import com.capstone.capstone.dto.UserDeleteDTO;
 import com.capstone.capstone.dto.UserPasswordChangeDTO;
 import com.capstone.capstone.dto.UserResponseDTO;
 import com.capstone.capstone.service.UserService;
@@ -35,6 +36,12 @@ public class UserController {
     @PostMapping("/password-change")
     public ResponseEntity<Map<String,Object>> passwordChange(final @ModelAttribute UserPasswordChangeDTO userPasswordChangeDTO) {
         Map<String, Object> result = userService.passwordChange(userPasswordChangeDTO);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/delete-user")
+    public ResponseEntity<Map<String,Object>> deleteUser(final @ModelAttribute UserDeleteDTO userDeleteDTO) {
+        Map<String, Object> result = userService.deleteUser(userDeleteDTO);
         return ResponseEntity.ok().body(result);
     }
 }

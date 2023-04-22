@@ -13,6 +13,7 @@ public enum CommonCode {
     SUCCESS_SIGN_IN(1200,"success sign in"),
     SUCCESS_SIGN_UP(1201,"success sign up"),
     SUCCESS_PASSWORD_CHANGE(1202,"success password change"),
+    SUCCESS_DELETE(1203,"success DELETE"),
     NOT_FOUND_USER_ID(1400,"not found user Id"),
     SAME_USER_ID(1401,"same user Id"),
     SAME_USER_NAME(1402,"same user name"),

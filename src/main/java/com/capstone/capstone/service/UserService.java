@@ -98,4 +98,29 @@ public class UserService {
             return null;
         }
     }
+
+    public Map<String,Object> deleteUser(UserDeleteDTO userDeleteDTO) {
+        Map<String, Object> result = new HashMap<>();
+        // 1. userId로 DB조회
+        Optional<UserEntity> byUserId = userRepository.findByUserId(userDeleteDTO.getUserId());
+
+        // 2. DB에 저장된 password와 일치하는지 판단
+        if(byUserId.isPresent()){// 조회 결과 O
+            UserEntity userEntity = byUserId.get();
+            if(userEntity.getUserPassword().equals(userDeleteDTO.getUserPassword())){ // 비밀번호 일치
+                userRepository.delete(userEntity);//delete
+                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_DELETE);
+                result.put("code",commonCodeDTO);
+            }
+            else{ // 비밀번호 불일치
+                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.ERROR_PASSWORD);
+                result.put("code",commonCodeDTO);
+            }
+        }
+        else {// 조회 결과 X
+            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NOT_FOUND_USER_ID);
+            result.put("code",commonCodeDTO);
+        }
+        return result;
+    }
 }
