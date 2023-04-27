@@ -20,7 +20,7 @@ public class UserResponseDTO{
     public static UserResponseDTO toUserResponseDTO(UserEntity userEntity) {
         UserResponseDTO userResponseDTO = UserResponseDTO.builder()
                 .id(userEntity.getId())
-                .userName(userEntity.getUserName())
+                .userName(userEntity.getNickName())
                 .userCreateDate(userEntity.getCreateDate())
                 .build();
         return userResponseDTO;
