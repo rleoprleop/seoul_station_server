@@ -12,12 +12,12 @@ public class UserDTO {
     private Long id;
     private String userId;
     private String userPassword;
-    private String userName;
+    private String nickName;
 
     public static UserDTO toUserDTO(UserEntity userEntity) {
         UserDTO userDTO = UserDTO.builder()
                 .userId(userEntity.getUserId())
-                .userName(userEntity.getUserName())
+                .nickName(userEntity.getNickName())
                 .userPassword(userEntity.getUserPassword())
                 .build();
         /*UserDTO userDTO = new UserDTO();
