@@ -66,20 +66,20 @@ public class UserService {
             // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUserId(), userDTO.getUserPassword());
 
-            System.out.println("1111" + authenticationToken);
+            //System.out.println("1111" + authenticationToken);
             // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
             // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            System.out.println("22222" + authentication);
+            //System.out.println("22222" + authentication);
 
             // 3. 인증 정보를 기반으로 JWT 토큰 생성
             TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-            System.out.println("33333" + tokenInfo);
+            //System.out.println("33333" + tokenInfo);
 
             // 1. userId로 DB조회
             Optional<UserEntity> byUserId = userRepository.findByUserId(userDTO.getUserId());
             // 2. DB에 저장된 password와 일치하는지 판단
-            System.out.println(byUserId.isPresent());
+            //System.out.println(byUserId.isPresent());
             if (byUserId.isPresent()) {// 조회 결과 O
                 UserEntity userEntity = byUserId.get();
                 if (passwordEncoder.matches(userDTO.getUserPassword(), userEntity.getPassword())) { // 비밀번호 일치
