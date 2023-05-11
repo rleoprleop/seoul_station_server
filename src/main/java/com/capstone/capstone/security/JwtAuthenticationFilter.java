@@ -1,10 +1,7 @@
 package com.capstone.capstone.security;
 
-import com.capstone.capstone.dto.CommonCode;
-import com.capstone.capstone.dto.CommonCodeDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends GenericFilterBean {
@@ -44,10 +40,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             res.getWriter().write(data);
         }// 2. validateToken 으로 토큰 유효성 검사
         else*/
+        //...
         if(token != null && jwtTokenProvider.validateToken(token)){
             // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext 에 저장
             try{
                 authentication = jwtTokenProvider.getAuthentication(token);
+                System.out.println(authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (IllegalArgumentException e) {
                 System.out.println("유효하지 않은 토큰");

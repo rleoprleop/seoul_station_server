@@ -5,14 +5,11 @@ import com.capstone.capstone.entity.UserEntity;
 import com.capstone.capstone.repository.UserRepository;
 import com.capstone.capstone.security.JwtTokenProvider;
 import jakarta.transaction.Transactional;
-//import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -26,7 +23,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
-
     private final PasswordEncoder passwordEncoder;
 
 
@@ -65,42 +61,49 @@ public class UserService {
     public Map<String,Object> signIn(UserDTO userDTO) {
         Map<String, Object> result = new HashMap<>();
 
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUserId(), userDTO.getUserPassword());
+        try {
+            // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+            // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUserId(), userDTO.getUserPassword());
 
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        System.out.println("22222"+authentication);
+            System.out.println("1111" + authenticationToken);
+            // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+            // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            System.out.println("22222" + authentication);
 
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-        System.out.println("33333"+tokenInfo);
+            // 3. 인증 정보를 기반으로 JWT 토큰 생성
+            TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+            System.out.println("33333" + tokenInfo);
 
-        // 1. userId로 DB조회
-        Optional<UserEntity> byUserId = userRepository.findByUserId(userDTO.getUserId());
-        // 2. DB에 저장된 password와 일치하는지 판단
-        if(byUserId.isPresent()){// 조회 결과 O
-            UserEntity userEntity = byUserId.get();
-            if(passwordEncoder.matches(userDTO.getUserPassword(),userEntity.getPassword())){ // 비밀번호 일치
-                // entity -> dto 변환 후 리턴
-                UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
-                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_SIGN_IN);
-                result.put("data",userResponseDTO);
-                result.put("code",commonCodeDTO);
-                result.put("token",tokenInfo);
+            // 1. userId로 DB조회
+            Optional<UserEntity> byUserId = userRepository.findByUserId(userDTO.getUserId());
+            // 2. DB에 저장된 password와 일치하는지 판단
+            System.out.println(byUserId.isPresent());
+            if (byUserId.isPresent()) {// 조회 결과 O
+                UserEntity userEntity = byUserId.get();
+                if (passwordEncoder.matches(userDTO.getUserPassword(), userEntity.getPassword())) { // 비밀번호 일치
+                    // entity -> dto 변환 후 리턴
+                    UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
+                    CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_SIGN_IN);
+                    result.put("data", userResponseDTO);
+                    result.put("code", commonCodeDTO);
+                    result.put("token", tokenInfo);
+                } else { // 비밀번호 불일치
+                    CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.ERROR_PASSWORD);
+                    result.put("code", commonCodeDTO);
+                }
+            } else {// 조회 결과 X
+                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NOT_FOUND_USER_ID);
+                result.put("code", commonCodeDTO);
             }
-            else{ // 비밀번호 불일치
-                CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.ERROR_PASSWORD);
-                result.put("code",commonCodeDTO);
-            }
-        }
-        else {// 조회 결과 X
+            return result;
+        }catch (Exception e){
+            System.out.println(e);
             CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NOT_FOUND_USER_ID);
-            result.put("code",commonCodeDTO);
+            result.put("code", commonCodeDTO);
+            return result;
         }
-        return result;
     }
 
     @Transactional // DB update

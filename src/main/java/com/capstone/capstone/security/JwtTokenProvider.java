@@ -5,9 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +36,7 @@ public class JwtTokenProvider {
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public TokenInfo generateToken(Authentication authentication) {
+    public TokenInfo generateToken(Authentication authentication){
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -84,6 +82,7 @@ public class JwtTokenProvider {
 
         // UserDetails 객체를 만들어서 Authentication 리턴
         UserDetails principal = new User(claims.getSubject(), "", authorities);
+        System.out.println("EEEEEEE"+principal);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
