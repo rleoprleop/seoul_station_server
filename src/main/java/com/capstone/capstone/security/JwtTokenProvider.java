@@ -1,6 +1,8 @@
 package com.capstone.capstone.security;
 
 import com.capstone.capstone.dto.TokenInfo;
+import com.capstone.capstone.dto.UserDTO;
+import com.capstone.capstone.entity.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,31 +16,23 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Component
 public class JwtTokenProvider {
 
-    private final String secretKey="seA3S45Enke7sla4Ase6k5pqEW2e35485t0eFEFlksdvuJI34iroOa354gj73653305s8k6dRW6n5x24m1cz";
-    private final int tokenTime = 10 * 60 * 1000; //분 초. 10분
-    private Key key;
+    private static final String secretKey="seA3S45Enke7sla4Ase6k5pqEW2e35485t0eFEFlksdvuJI34iroOa354gj73653305s8k6dRW6n5x24m1cz";
+    private static final int tokenTime = 10 * 60 * 1000; //분 초. 10분
+    private static Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 
-
-    @PostConstruct
-    public void init() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        key = Keys.hmacShaKeyFor(keyBytes);
-    }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public TokenInfo generateToken(Authentication authentication){
+    public static String generateToken(UserEntity userEntity){
         // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
+        /*String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
@@ -62,11 +56,45 @@ public class JwtTokenProvider {
                 .grantType("Bearer")
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .build();
+                .build();*/
+        JwtBuilder builder = Jwts.builder()
+                .setHeader(createHeader())                              // Header 구성
+                .setClaims(createClaims(userEntity))                       // Payload - Claims 구성
+                .setSubject(String.valueOf(userEntity.getUserId()))        // Payload - Subject 구성
+                .signWith(key, SignatureAlgorithm.HS256)  // Signature 구성
+                .setExpiration(createExpiredDate());                    // Expired Date 구성
+        return builder.compact();
+    }
+
+    private static Date createExpiredDate() {
+        long now = (new Date()).getTime();
+        Date date = new Date(now + tokenTime);
+        return date;
+    }
+
+    private static Map<String, Object> createHeader() {
+        Map<String, Object> header = new HashMap<>();
+
+        header.put("typ", "JWT");
+        header.put("alg", "HS256");
+        header.put("regDate", System.currentTimeMillis());
+        return header;
+    }
+
+    private static Map<String, Object> createClaims(UserEntity userEntity) {
+        // 공개 클레임에 사용자의 이름과 이메일을 설정하여 정보를 조회할 수 있다.
+        Map<String, Object> claims = new HashMap<>();
+
+        log.info("userId :" + userEntity.getUserId());
+        log.info("nickName :" + userEntity.getNickName());
+
+        claims.put("userId", userEntity.getUserId());
+        claims.put("nickName", userEntity.getNickName());
+        return claims;
     }
 
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
-    public Authentication getAuthentication(String accessToken) {
+    public static Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
@@ -87,27 +115,40 @@ public class JwtTokenProvider {
     }
 
     // 토큰 정보를 검증하는 메서드
-    public boolean validateToken(String token) throws ExpiredJwtException, UnsupportedJwtException, IllegalArgumentException, JwtException{
+    public static boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Claims claims = getClaimsFormToken(token);
             return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("JWT claims string is empty."+ e);
-            throw e;
         } catch (ExpiredJwtException e) {
-            System.out.println("Expired JWT Token "+ e);
-            throw e;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            System.out.println("Invalid JWT Token "+ e);
-            throw e;
+            System.out.println("Token Expired "+ e);
+            return false;
+        } catch (JwtException e) {
+            System.out.println("Token Tampered "+ e);
+            return false;
+        } catch (NullPointerException e) {
+            System.out.println("Token is null "+ e);
+            return false;
         }
     }
 
-    private Claims parseClaims(String accessToken) {
+    private static Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    private static Claims getClaimsFormToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    public static String getUserIdFromToken(String token) {
+        Claims claims = getClaimsFormToken(token);
+        return claims.get("userId").toString();
+    }
+
+    public static String getTokenFromHeader(String header) {
+        return header.split(" ")[1];
     }
 }

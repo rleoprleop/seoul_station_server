@@ -1,4 +1,4 @@
-package com.capstone.capstone.security;
+/*package com.capstone.capstone.security;
 
 import com.capstone.capstone.dto.CommonCode;
 import com.capstone.capstone.dto.CommonCodeDTO;
@@ -48,4 +48,4 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
-}
+}*/

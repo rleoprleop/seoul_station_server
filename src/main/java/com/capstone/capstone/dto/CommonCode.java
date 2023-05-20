@@ -20,6 +20,8 @@ public enum CommonCode {
     ERROR_PASSWORD(1403,"error password"),
     FAIL_AUTHENTICATION(1404,"fail authentication"),//인증 실패
     TOKEN_EXPIRED(1405,"token expired"),//토큰이 만료됨.
+    NOT_FOUND_TOKEN(1407,"not found token"),//토큰이 없음.
+
     TOKEN_INVALID(1406,"token invalid");//토큰이 유효하지 않음
 
     private int status;

@@ -26,12 +26,12 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/sign-in")
+    /*@PostMapping("/sign-in")
     public ResponseEntity<Map<String,Object>> signIn(final @RequestBody UserDTO userDTO) {
         Map<String, Object> result = userService.signIn(userDTO);
 
         return ResponseEntity.ok().body(result);
-    }
+    }*/
 
     @PostMapping("/password-change")
     public ResponseEntity<Map<String,Object>> passwordChange(final @RequestBody UserPasswordChangeDTO userPasswordChangeDTO) {
