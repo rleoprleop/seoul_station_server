@@ -1,4 +1,4 @@
-package com.capstone.capstone.service;
+package com.capstone.capstone.security;
 
 import com.capstone.capstone.entity.UserEntity;
 import com.capstone.capstone.repository.UserRepository;
