@@ -76,8 +76,8 @@ public class UserService {
                 // userPassword를 newUserPassword로 DB업데이트
                 userEntity.setUserPassword(passwordEncoder.encode(userPasswordChangeDTO.getNewUserPassword()));
                 // entity -> dto 변환 후 리턴
-                UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
                 CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_PASSWORD_CHANGE);
+                UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity,commonCodeDTO);
                 result.put("data",userResponseDTO);
                 result.put("code",commonCodeDTO);
             }
@@ -120,4 +120,6 @@ public class UserService {
         }
         return result;
     }
+
+
 }

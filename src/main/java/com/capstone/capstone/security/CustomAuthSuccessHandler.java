@@ -34,7 +34,6 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         Optional<UserEntity> byUserId = userRepository.findByUserId(authentication.getName());
         System.out.println(byUserId);
         UserEntity userEntity = byUserId.get();
-        //JSONObject userVoObj = (JSONObject) ConvertUtil.convertObjectToJsonObject(userDto);
 
         HashMap<String, Object> responseMap = new HashMap<>();
 
@@ -45,10 +44,9 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
         responseMap.put("data", setResponseCode(userResponseDTO));
         jsonObject = new JSONObject(responseMap);
-        // TODO: 추후 JWT 발급에 사용 할 예정
+
         String token = JwtTokenProvider.generateToken(userEntity);
         jsonObject.put("token", token);
-        // response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE + " " + token);
 
 
         response.setCharacterEncoding("UTF-8");

@@ -26,11 +26,9 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
 
-        // [STEP1] 클라이언트로 전달 할 응답 값을 구성합니다.
         HashMap<String, Object> resultMap = new HashMap<>();
 
 
-        // [STEP2] 발생한 Exception 에 대해서 확인합니다.
         if (exception instanceof AuthenticationServiceException) {
             CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NOT_FOUND_USER_ID);
             resultMap.put("code",setCode(commonCodeDTO));
@@ -60,13 +58,11 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
             resultMap.put("code",setCode(commonCodeDTO));
 
         }
-        // [STEP4] 응답 값을 구성하고 전달합니다.
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         PrintWriter printWriter = response.getWriter();
 
-        resultMap.put("userInfo", null);
-        resultMap.put("resultCode", 80);
+        resultMap.put("data", null);
         JSONObject jsonObject = new JSONObject(resultMap);
 
         printWriter.print(jsonObject);

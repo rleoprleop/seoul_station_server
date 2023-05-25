@@ -93,7 +93,7 @@ public class JwtTokenProvider {
         return claims;
     }
 
-    // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
+    /*// JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public static Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
@@ -112,7 +112,7 @@ public class JwtTokenProvider {
         UserDetails principal = new User(claims.getSubject(), "", authorities);
         System.out.println("EEEEEEE"+principal);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-    }
+    }*/
 
     // 토큰 정보를 검증하는 메서드
     public static boolean validateToken(String token) {
