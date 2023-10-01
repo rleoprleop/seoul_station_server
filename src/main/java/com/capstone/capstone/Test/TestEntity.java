@@ -1,4 +1,4 @@
-package com.capstone.capstone.Test;
+/*package com.capstone.capstone.Test;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,4 +19,4 @@ public class TestEntity {
     private String name;
     private String num;
 
-}
+}*/

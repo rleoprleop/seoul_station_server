@@ -1,4 +1,4 @@
-package com.capstone.capstone.Test;
+/*package com.capstone.capstone.Test;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,4 +31,4 @@ public class TestApiController {
         return  ResponseEntity.ok().body(result);
     }
 
-}
+}*/

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 위 코드가 mapper 설정을 하는 코드 -->
+
+<!-- Mapper를 사용하는 Repository의 전체 경로를 적어줘야함. -->
+<mapper namespace="com.capstone.capstone.mapper.UserMapper">
+    <select id="getMemberList" resultType="UserVO">
+        select * from user_table;
+    </select>
+
+    <select id="getUserById" resultType="UserVO">
+        select
+        u1_0.id as id,
+        u1_0.user_id as userId,
+        u1_0.user_password as userPassword,
+        u1_0.nick_name as nickName,
+        u1_0.modified_date as modifiedDate,
+        u1_0.create_date as createDate
+        from
+        user_table u1_0
+        where
+        u1_0.id = ${id};
+    </select>
+
+    <select id="getUserByUserId" resultType="UserVO">
+        select
+        u1_0.id as id,
+        u1_0.user_id as userId,
+        u1_0.user_password as userPassword,
+        u1_0.nick_name as nickName,
+        u1_0.modified_date as modifiedDate,
+        u1_0.create_date as createDate
+        from
+        user_table u1_0
+        where
+        u1_0.user_id= #{userId};
+    </select>
+
+    <select id="getUserByNickName" resultType="UserVO">
+        select * from user_table where nick_name = #{nickName};
+    </select>
+
+    <select id="getUserJoinRoles" resultType="UserJoinRolesVO">
+        select
+        u1_0.id as id,
+        u1_0.user_id as userId,
+        u1_0.user_password as userPassword,
+        u1_0.nick_name as nickName,
+        u1_0.modified_date as modifiedDate,
+        u1_0.create_date as createDate,
+        u_roles.roles as roles
+        from
+        user_table u1_0 join user_entity_roles u_roles
+        on
+        u1_0.id=u_roles.user_entity_id
+        where
+        u1_0.user_id=#{userId};
+    </select>
+
+    <insert id="createUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert
+        into
+        user_table (create_date, modified_date, nick_name, user_id, user_password)
+        values
+        (#{createDate}, #{modifiedDate}, #{nickName}, #{userId}, #{userPassword});
+    </insert>
+
+    <insert id="createUserRole" parameterType="UserRolesVO">
+        insert
+        into
+        user_entity_roles (user_entity_id, roles)
+        values
+        (${userEntityId}, #{roles});
+    </insert>
+
+    <delete id="deleteUser">
+        delete
+        from user_table
+        where
+        id = ${id};
+    </delete>
+    <delete id="deleteUserRole">
+        delete
+        from
+        user_entity_roles
+        where
+        user_entity_id=${id};
+    </delete>
+
+    <update id="updateUserPassword" parameterType="updateUserPasswordParam">
+        update user_table
+        set
+        modified_date=#{modifiedDate},
+        user_password=#{userPassword}
+        where
+        id=${id}
+    </update>
+</mapper>

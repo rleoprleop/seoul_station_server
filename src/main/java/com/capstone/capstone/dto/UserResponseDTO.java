@@ -1,6 +1,6 @@
 package com.capstone.capstone.dto;
 
-import com.capstone.capstone.entity.UserEntity;
+//import com.capstone.capstone.entity.UserEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class UserResponseDTO<T>{
     private LocalDateTime userCreateDate;
     private T t;
 
-    public static UserResponseDTO toUserResponseDTO(UserEntity userEntity) {
+    /*public static UserResponseDTO toUserResponseDTO(UserEntity userEntity) {
         UserResponseDTO userResponseDTO = UserResponseDTO.builder()
                 .id(userEntity.getId())
                 .userName(userEntity.getNickName())
@@ -35,5 +35,5 @@ public class UserResponseDTO<T>{
                 .t(commonCodeDTO)
                 .build();
         return userResponseDTO;
-    }
+    }*/
 }

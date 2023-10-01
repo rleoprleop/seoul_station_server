@@ -1,4 +1,4 @@
-package com.capstone.capstone.entity;
+/*package com.capstone.capstone.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,10 +17,8 @@ public class PlayerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
     @Column
     private Long id;
-    @Column(unique = true)
-    private String userId;
     @Column
-    private String userPassword;
-    @Column(unique = true)
-    private String nickName;
-}
+    private String stage;
+    @Column
+    private String health;
+}*/

@@ -1,6 +1,6 @@
 package com.capstone.capstone.dto;
 
-import com.capstone.capstone.entity.UserEntity;
+//import com.capstone.capstone.entity.UserEntity;
 import lombok.*;
 
 @Getter
