@@ -1,4 +1,4 @@
-package com.capstone.capstone.entity;
+/*package com.capstone.capstone.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,3 +27,4 @@ public class MobEntity {
     @OneToMany(mappedBy = "mob")
     private List<StageMobEntity> stage = new ArrayList<>();
 }
+*/

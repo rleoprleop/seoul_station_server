@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 위 코드가 mapper 설정을 하는 코드 -->
+
+<!-- Mapper를 사용하는 Repository의 전체 경로를 적어줘야함. -->
+<mapper namespace="com.capstone.capstone.mapper.StageMapper">
+    <select id="getMobByStageId" resultType="StageJoinMobVO">
+        select
+        stage_mob_table.x as x,
+        stage_mob_table.y as y,
+        mob_table.max_health as maxHealth,
+        mob_table.mob_name as mobName,
+        stage_table.stage_name as stageName
+        from
+        stage_mob_table
+        join
+        mob_table
+        on
+        stage_mob_table.mob_id=mob_table.id
+        join
+        stage_table
+        on
+        stage_mob_table.stage_id = stage_table.id
+        where stage_table.id = #{stageId};
+    </select>
+
+    <select id="getBackgroundByStageId" resultType="StageJoinBackgroundVO">
+        select
+        stage_table.stage_name as name,
+        background_table.background_canvaslength as backgroundCanvasLength,
+        background_table.background_length as backgroundLength,
+        background_table.background_name as backgroundName
+        from
+        stage_table
+        join
+        background_table
+        on
+        stage_table.background_id = background_table.background_id
+        where stage_table.id = #{stageId};
+    </select>
+</mapper>

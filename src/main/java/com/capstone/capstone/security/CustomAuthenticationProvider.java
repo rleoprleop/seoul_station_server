@@ -1,6 +1,6 @@
 package com.capstone.capstone.security;
 
-import com.capstone.capstone.dto.UserDetailsDTO;
+//import com.capstone.capstone.dto.UserDetailsDTO;
 import jakarta.annotation.Resource;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +35,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String userId = token.getName();
         String userPw = (String) token.getCredentials();
 
+        System.out.println(userId+", "+userPw);
+
         // Spring Security - UserDetailsService를 통해 DB에서 아이디로 사용자 조회
         UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
 
-        System.out.println(userId+" "+userDetails.getPassword()+" "+userPw);
+        System.out.println("11"+userId+" "+userDetails.getPassword()+" "+userPw);
         if (!(passwordEncoder.matches(userPw, userDetails.getPassword()))) {
+            System.out.println("Eeee");
             throw new BadCredentialsException(userDetails.getPassword() + "Invalid password");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, userPw, userDetails.getAuthorities());

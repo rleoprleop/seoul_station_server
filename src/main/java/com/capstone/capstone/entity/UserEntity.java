@@ -1,4 +1,4 @@
-package com.capstone.capstone.entity;
+/*package com.capstone.capstone.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -69,3 +69,4 @@ public class UserEntity extends BaseTimeEntity implements UserDetails {
         return false;
     }
 }
+*/

@@ -1,8 +1,12 @@
 package com.capstone.capstone.security;
 
+import com.capstone.capstone.VO.PlayerVO;
+import com.capstone.capstone.VO.UserVO;
 import com.capstone.capstone.dto.*;
-import com.capstone.capstone.entity.UserEntity;
-import com.capstone.capstone.repository.UserRepository;
+//import com.capstone.capstone.entity.UserEntity;
+//import com.capstone.capstone.repository.UserRepository;
+import com.capstone.capstone.mapper.PlayerMapper;
+import com.capstone.capstone.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,28 +28,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PlayerMapper playerMapper;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
         log.debug("3.CustomLoginSuccessHandler");
 
         System.out.println("EE"+(authentication.getName()));
-        Optional<UserEntity> byUserId = userRepository.findByUserId(authentication.getName());
+        Optional<UserVO> byUserId = userMapper.getUserByUserId(authentication.getName());
         System.out.println(byUserId);
-        UserEntity userEntity = byUserId.get();
-
+        UserVO userVO = byUserId.get();
+        System.out.println(userVO.getUserId()+userVO.getUserPassword()+userVO.getNickName());
+        Optional<PlayerVO> playerVOOptional = playerMapper.getPlayerById(userVO.getId());
+        PlayerVO playerVO = playerVOOptional.get();
         HashMap<String, Object> responseMap = new HashMap<>();
 
         JSONObject jsonObject;
         CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_SIGN_IN);
         responseMap.put("code",setCommonCode(commonCodeDTO));
-        UserResponseDTO userResponseDTO = UserResponseDTO.toUserResponseDTO(userEntity);
-
-        responseMap.put("data", setResponseCode(userResponseDTO));
+        responseMap.put("player",setPlayerCode(playerVO));
+        responseMap.put("user", setUserCode(userVO));
         jsonObject = new JSONObject(responseMap);
 
-        String token = JwtTokenProvider.generateToken(userEntity);
+        String token = JwtTokenProvider.generateToken(userVO);
         jsonObject.put("token", token);
 
 
@@ -57,12 +63,20 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         printWriter.close();
     }
 
-    public Map<String,Object> setResponseCode(UserResponseDTO userResponseDTO) {
+    public Map<String,Object> setUserCode(UserVO userVO) {
         HashMap<String, Object> code = new HashMap<>();
-        String userCreateDate = userResponseDTO.getUserCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm:ss"));
-        code.put("id",userResponseDTO.getId());
-        code.put("userName",userResponseDTO.getUserName());
+        String userCreateDate = userVO.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm:ss"));
+        code.put("id",userVO.getId());
+        code.put("userName",userVO.getNickName());
         code.put("userCreateDate",userCreateDate);
+
+        return code;
+    }
+
+    public Map<String,Object> setPlayerCode(PlayerVO playerVO) {
+        HashMap<String, Object> code = new HashMap<>();
+        code.put("health",playerVO.getHealth());
+        code.put("stage",playerVO.getStage());
 
         return code;
     }

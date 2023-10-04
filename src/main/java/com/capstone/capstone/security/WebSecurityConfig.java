@@ -1,11 +1,14 @@
 package com.capstone.capstone.security;
 
-import com.capstone.capstone.repository.UserRepository;
+//import com.capstone.capstone.repository.UserRepository;
+import com.capstone.capstone.mapper.PlayerMapper;
+import com.capstone.capstone.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +26,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-    private final UserRepository userRepository;
+    //private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PlayerMapper playerMapper;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -38,6 +43,11 @@ public class WebSecurityConfig {
         http
                 // [STEP1] 서버에 인증정보를 저장하지 않기에 csrf를 사용하지 않는다.
                 .csrf().disable()
+
+                .headers()
+                .frameOptions().sameOrigin()
+
+                .and()
 
                 // [STEP2] 토큰을 활용하는 경우 모든 요청에 대해 '인가'에 대해서 적용
                 .authorizeHttpRequests(authz -> authz.anyRequest().permitAll())
@@ -81,7 +91,7 @@ public class WebSecurityConfig {
 
     @Bean
     public CustomAuthSuccessHandler customLoginSuccessHandler() {
-        return new CustomAuthSuccessHandler(userRepository);
+        return new CustomAuthSuccessHandler(userMapper,playerMapper);
     }
 
     @Bean

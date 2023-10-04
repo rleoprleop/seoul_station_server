@@ -1,4 +1,4 @@
-package com.capstone.capstone.entity;
+/*package com.capstone.capstone.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -20,3 +20,4 @@ public class BaseTimeEntity { //DB 생성시 생성 시간 및 수정 시간 추
     @LastModifiedDate// Entity 값을 변경할 때 시간 자동 저장
     private LocalDateTime modifiedDate;
 }
+*/

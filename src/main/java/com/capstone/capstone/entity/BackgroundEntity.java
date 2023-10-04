@@ -1,4 +1,4 @@
-package com.capstone.capstone.entity;
+/*package com.capstone.capstone.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,4 +21,4 @@ public class BackgroundEntity {
     private String background_name;
     @Column
     private String background_length;
-}
+}*/

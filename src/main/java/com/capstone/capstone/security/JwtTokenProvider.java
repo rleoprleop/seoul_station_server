@@ -1,12 +1,14 @@
 package com.capstone.capstone.security;
 
+import com.capstone.capstone.VO.UserVO;
 import com.capstone.capstone.dto.TokenInfo;
 import com.capstone.capstone.dto.UserDTO;
-import com.capstone.capstone.entity.UserEntity;
+//import com.capstone.capstone.entity.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,12 +27,12 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private static final String secretKey="seA3S45Enke7sla4Ase6k5pqEW2e35485t0eFEFlksdvuJI34iroOa354gj73653305s8k6dRW6n5x24m1cz";
-    private static final int tokenTime = 10 * 60 * 1000; //분 초. 10분
+    private static final int tokenTime = 10 * 60 * 100000; //분 초. 10분
     private static Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public static String generateToken(UserEntity userEntity){
+    public static String generateToken(UserVO userVO){
         // 권한 가져오기
         /*String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -59,8 +61,8 @@ public class JwtTokenProvider {
                 .build();*/
         JwtBuilder builder = Jwts.builder()
                 .setHeader(createHeader())                              // Header 구성
-                .setClaims(createClaims(userEntity))                       // Payload - Claims 구성
-                .setSubject(String.valueOf(userEntity.getUserId()))        // Payload - Subject 구성
+                .setClaims(createClaims(userVO))                       // Payload - Claims 구성
+                .setSubject(String.valueOf(userVO.getUserId()))        // Payload - Subject 구성
                 .signWith(key, SignatureAlgorithm.HS256)  // Signature 구성
                 .setExpiration(createExpiredDate());                    // Expired Date 구성
         return builder.compact();
@@ -81,15 +83,15 @@ public class JwtTokenProvider {
         return header;
     }
 
-    private static Map<String, Object> createClaims(UserEntity userEntity) {
+    private static Map<String, Object> createClaims(UserVO userVO) {
         // 공개 클레임에 사용자의 이름과 이메일을 설정하여 정보를 조회할 수 있다.
         Map<String, Object> claims = new HashMap<>();
 
-        log.info("userId :" + userEntity.getUserId());
-        log.info("nickName :" + userEntity.getNickName());
+        log.info("userId :" + userVO.getUserId());
+        log.info("nickName :" + userVO.getNickName());
 
-        claims.put("userId", userEntity.getUserId());
-        claims.put("nickName", userEntity.getNickName());
+        claims.put("userId", userVO.getUserId());
+        claims.put("nickName", userVO.getNickName());
         return claims;
     }
 
