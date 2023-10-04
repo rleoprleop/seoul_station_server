@@ -26,4 +26,7 @@ public class GameRoom {//전체 게임방 gameroom->room->Player1, Player2, ...
             return true;
         }
     }
+    public void removeRoom(String roomId){
+        roomMap.remove(roomId);
+    }
 }

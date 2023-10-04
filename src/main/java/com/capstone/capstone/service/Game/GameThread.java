@@ -26,11 +26,11 @@ public class GameThread {//게임 시작.
     }
 
     private long roomTime(Room room,String roomId){
-        if(room.getTime()-System.currentTimeMillis() >= 10*1000*60){
+        if(System.currentTimeMillis() - room.getTime() >= 10*1000*60){
             simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,"game over");
             getThread(roomId).interrupt();
         }
-        return room.getTime()-System.currentTimeMillis();
+        return System.currentTimeMillis() - room.getTime();
     }
 
     public Thread gameRoomThread(String roomId, Room room, String userId1, String userId2){
@@ -46,7 +46,7 @@ public class GameThread {//게임 시작.
                         gameUtil.gameLoop(room,userId1,userId2);
                         log.info("Room: {}", baos.toString());
                         log.info("roomId {}",roomId);
-                        room.setTime(roomTime(room,roomId));
+//                        room.setTime(roomTime(room,roomId));
                         simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId, room);
                     } catch (Exception e) {
                         log.debug("1--------------------------------------");
@@ -66,6 +66,7 @@ public class GameThread {//게임 시작.
             }
         });
         t.start();
+        threadMap.put(roomId,t);
         return t;
     }
 }

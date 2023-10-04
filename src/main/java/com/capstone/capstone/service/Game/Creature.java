@@ -32,7 +32,7 @@ public class Creature {
 
     //맞았는지 여부
     private boolean damaged;// = false;
-    private int damagedCount;// = 0;
+//    private int damagedCount;// = 0;
 
     //체력
     private int healthMax;// = 3;
@@ -49,14 +49,18 @@ public class Creature {
         idleLoop=0;
         walkingLoop=0;
         attackLoop=0;
+
         idleCut=0;
         walkingCut=0;
         attackCut=0;
+
         idleCount=0;
         walkingCount=0;
         attackCount=0;
+
         damaged =false;
-        damagedCount=0;
+//        damagedCount=0;
+
         this.healthMax=healthMax;
         healthCount=healthMax;
     }
@@ -93,7 +97,7 @@ public class Creature {
         attackCount = attackC;
     }
 
-    public void setHealthOfHit(int i){
+    public void subHealth(int i){
         healthCount-=i;
     }
     public void addX(int i){
@@ -122,9 +126,6 @@ public class Creature {
         attackCount+=i;
     }
 
-    public void addDamagedCount(int i) {
-        damagedCount+=i;
-    }
 
     public void addIdleCut(int i) {
         idleCut+=i;

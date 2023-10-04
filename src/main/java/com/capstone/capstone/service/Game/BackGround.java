@@ -14,6 +14,7 @@ public class BackGround {
     private int ratio;
     private boolean bgMovingRight;
     private boolean bgMovingLeft;
+    private int stageNum;
     public BackGround(){
         bg_length=2000;
         bg_canvasLength=1000;
@@ -23,5 +24,12 @@ public class BackGround {
         ratio=2;
         bgMovingRight=false;
         bgMovingLeft=false;
+        stageNum=0;
+    }
+    public void addBgX(int i){
+        bg_x+=i;
+    }
+    public void subBgX(int i){
+        bg_x-=i;
     }
 }

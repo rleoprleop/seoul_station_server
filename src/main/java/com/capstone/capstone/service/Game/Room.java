@@ -13,6 +13,7 @@ public class Room {
     private BackGround backGround;
     private Map<Integer,NormalZombie> normalZombieMap;//int: mob1,2,3...(1,2,3...)
     private int[] checkXMap;
+    private int currentStageNum;
     private long time;
     public Room(Map<String,Player> p, Map<Integer,NormalZombie> nz, BackGround bg, int[] cX){
         active=false;
@@ -21,5 +22,9 @@ public class Room {
         backGround=bg;
         checkXMap=cX;
         time=System.currentTimeMillis();
+        currentStageNum=0;
+    }
+    public void addCurrentStageNum(int i){
+        currentStageNum+=i;
     }
 }

@@ -50,6 +50,9 @@ public class WebsocketSecurityInterceptor implements ChannelInterceptor, Applica
             // accessor에 등록
             accessor.setUser(authentication);*/
         }
+        if(StompCommand.DISCONNECT.equals(headerAccessor.getCommand())) {
+            webSocketService.endGame(headerAccessor.getSessionId());
+        }
         return message;
     }
 

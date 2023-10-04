@@ -1,6 +1,5 @@
 package com.capstone.capstone.service.Game;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,19 +16,19 @@ public class AttackBox {
     public AttackBox(int position_x, int position_y){
         this.position_x=position_x;
         this.position_y=position_y;
-        width=80;
+        width=120;
         height=50;
         atkTimer=0;
     }
-    public void setOfAttackTimer(int i){
+    public void addOfAttackTimer(int i){
         atkTimer+=i;
     }
 
     public void subPosition_x(int i) {
-        position_x-=1;
+        position_x-=i;
     }
 
     public void addPosition_x(int i) {
-        position_x+=1;
+        position_x+=i;
     }
 }

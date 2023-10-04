@@ -22,7 +22,7 @@ public class Player extends Creature{
         attackTimer=0;
         attackFrame=0;
         damagedLoop=0;
-        blockBox=new BlockBox(x+canvasLength/2, x+30,y);
+        blockBox=new BlockBox(x+canvasLength - 10, x+10,y+60);
     }
 
     public void addFrameCount(int i){
@@ -36,4 +36,7 @@ public class Player extends Creature{
     public void addAttackFrame(int i) {
         attackFrame+=i;
     }
+
+    public void addDamagedCount(int i) { damagedCount+=i; }
+
 }
