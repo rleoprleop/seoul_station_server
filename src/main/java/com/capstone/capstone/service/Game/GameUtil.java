@@ -580,10 +580,10 @@ public class GameUtil {
                 else if (nz.get(1).getVel().isAttacking() && nz.get(1).getWaitCount() == 30) {
 
                     if (nz.get(1).getAttackFrame() < 10) {
-                        nz.get(1).addAttackCount(1);
+                        nz.get(1).addAttackFrame(1);
                     }
                     else if (nz.get(1).getAttackFrame() == 10) {
-                        nz.get(1).setAttackCount(0);
+                        nz.get(1).setAttackFrame(0);
                         if (nz.get(1).getAttackCount() < nz.get(1).getAttackLoop() - 1) {
                             nz.get(1).addAttackCount(1);
                         }

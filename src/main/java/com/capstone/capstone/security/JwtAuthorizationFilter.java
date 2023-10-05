@@ -69,7 +69,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                 // [STEP4] 토큰을 기반으로 사용자 아이디를 반환 받는 메서드
                 String userId = JwtTokenProvider.getUserIdFromToken(token);
-                logger.debug("[+] userId Check: " + userId);
+                log.info("userId Check: {}",userId);
 
                 // [STEP5] 사용자 아이디가 존재하는지 여부 체크
                 if (userId != null && !userId.equalsIgnoreCase("")) {
