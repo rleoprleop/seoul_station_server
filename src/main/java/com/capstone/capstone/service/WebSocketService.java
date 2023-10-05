@@ -81,6 +81,8 @@ public class WebSocketService {
             gameRoom.addRoom(roomId,room);
             gameThread.gameRoomThread(roomId,room,active.get(roomId).get(0),active.get(roomId).get(1));
         }
+        WaitRoomResponseDTO waitRoomResponseDTO = WaitRoomResponseDTO.builder().waiting((long) active.get(roomId).size()).userId(userId).build();
+        simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,waitRoomResponseDTO);
     }
 
     public void endGame(String sessionId){
