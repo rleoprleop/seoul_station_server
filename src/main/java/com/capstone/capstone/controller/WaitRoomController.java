@@ -2,7 +2,6 @@ package com.capstone.capstone.controller;
 
 import com.capstone.capstone.dto.JoinWaitRoomRequestDTO;
 import com.capstone.capstone.service.RoomService;
-import com.capstone.capstone.service.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,7 @@ public class WaitRoomController {
      */
     @PostMapping("/waitroom/create")
     public ResponseEntity JoinWaitRoom(@RequestBody JoinWaitRoomRequestDTO dto) {//UserId
-        Map<String, Object> result=roomService.JoinWaitRoomService(dto);
+        Map<String, Object> result=roomService.getRoomIdService(dto);
         return ResponseEntity.ok().body(result);//UserId, waitRoomId
     }
 }
