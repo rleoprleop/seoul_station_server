@@ -59,4 +59,16 @@ public class RoomService {
         roomUser.get(roomId).add(joinWaitRoomRequestDTO.getUserId());
         return result;//waitroomid
     }
+
+    public Map<String, Object> getCodeService(JoinWaitRoomRequestDTO joinWaitRoomRequestDTO){
+        Map<String, Object> result = new HashMap<>();
+        StringBuffer strPwd = new StringBuffer();
+        char str[] = new char[1];
+        for (int i = 0; i < 5; i++) {
+            str[0] = (char) ((Math.random() * 26) + 65);
+            strPwd.append(str);
+        }
+        result.put("code",strPwd.toString());
+        return result;
+    }
 }

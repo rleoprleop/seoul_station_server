@@ -28,4 +28,9 @@ public class WaitRoomController {
         Map<String, Object> result=roomService.getRoomIdService(dto);
         return ResponseEntity.ok().body(result);//UserId, waitRoomId
     }
+    @PostMapping("/waitroom/code")
+    public ResponseEntity GetCode(@RequestBody JoinWaitRoomRequestDTO dto) {//UserId
+        Map<String, Object> result=roomService.getRoomIdService(dto);
+        return ResponseEntity.ok().body(result);//code
+    }
 }

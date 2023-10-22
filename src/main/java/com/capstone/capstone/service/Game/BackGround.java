@@ -16,12 +16,12 @@ public class BackGround {
     private boolean bgMovingLeft;
     private int stageNum;
     public BackGround(){
-        bg_length=2000;
-        bg_canvasLength=1000;
+        bg_length=1960;
+        bg_canvasLength=960;
         bg_x=0;
         bg_count=4;
-        bg_xMax=(2000*4)-2000*2;
-        ratio=2;
+        bg_xMax=(1960*3)-1960*(1960/960);
+        ratio=1960/960;
         bgMovingRight=false;
         bgMovingLeft=false;
         stageNum=0;

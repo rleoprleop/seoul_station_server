@@ -19,6 +19,8 @@ public class Vel {
 
     //방어 하고있는지 여부
     private boolean blocking;// = false;
+    //상호 작용 관련 수행 여부 (잡기 풀기 등등...)
+    private boolean interaction;
     public Vel(){
         lookingRight=true;
         attacking =false;
@@ -27,5 +29,6 @@ public class Vel {
         movingRight =false;
         movingLeft =false;
         blocking =false;
+        interaction = false;
     }
 }

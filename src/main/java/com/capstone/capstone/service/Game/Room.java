@@ -11,14 +11,14 @@ public class Room {
     private boolean active;
     private Map<String, Player> playerMap;//string: userId(player)
     private BackGround backGround;
-    private Map<Integer,NormalZombie> normalZombieMap;//int: mob1,2,3...(1,2,3...)
+    private Zombie zombie;
     private int[] checkXMap;
     private int currentStageNum;
     private long time;
-    public Room(Map<String,Player> p, Map<Integer,NormalZombie> nz, BackGround bg, int[] cX){
+    public Room(Map<String,Player> p, Zombie z, BackGround bg, int[] cX){
         active=false;
         playerMap=p;
-        normalZombieMap=nz;
+        zombie=z;
         backGround=bg;
         checkXMap=cX;
         time=System.currentTimeMillis();

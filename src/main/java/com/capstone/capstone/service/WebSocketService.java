@@ -89,21 +89,25 @@ public class WebSocketService {
         String roomId = sessionInfoMap.get(sessionId).getRoomId();
         String userId1 = sessionInfoMap.get(sessionId).getUserId();
         String userId2;
-        if(active.get(roomId).get(0).equals(userId1)){
+        log.info("map: {}, {}",sessionInfoMap.get(sessionId),userId1);
+        if(active.get(roomId).get(0).equals(userId1)&&active.get(roomId).size()==2){
             userId2=active.get(roomId).get(1);
         }
         else{
             userId2=active.get(roomId).get(0);
         }
-        String sessionId2 = userSessionMap.get(userId2);
-        sessionInfoMap.remove(sessionId2);
         sessionInfoMap.remove(sessionId);
         userSessionMap.remove(userId1);
-        userSessionMap.remove(userId2);
-        active.remove(roomId);
-        gameRoom.removeRoom(roomId);
-        gameThread.getThread(roomId).interrupt();
-        simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,"other user afk, game over");
+        active.get(roomId).remove(userId1);
+        if(userSessionMap.get(userId2)==null){
+            log.info("remove!!!");
+            active.remove(roomId);
+            gameRoom.removeRoom(roomId);
+            gameThread.getThread(roomId).interrupt();
+            simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,"game over");
+        }
+
+
     }
     public void playGame(PlayRoomMessage dto, String waitRoomId, String userId){
         if(!gameRoom.hasRoom(waitRoomId)){
