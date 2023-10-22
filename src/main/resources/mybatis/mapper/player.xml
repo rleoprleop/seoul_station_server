@@ -29,4 +29,12 @@
         where
         player_id = ${id};
     </delete>
+    <update id="updatePlayer" parameterType="updateUserPasswordParam">
+        update player_table
+        set
+        stage=#{stage},
+        health=#{health}
+        where
+        player_id=${id}
+    </update>
 </mapper>

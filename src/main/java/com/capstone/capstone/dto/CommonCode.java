@@ -22,7 +22,8 @@ public enum CommonCode {
     TOKEN_EXPIRED(1405,"token expired"),//토큰이 만료됨.
     NOT_FOUND_TOKEN(1407,"not found token"),//토큰이 없음.
 
-    TOKEN_INVALID(1406,"token invalid");//토큰이 유효하지 않음
+    TOKEN_INVALID(1406,"token invalid"),//토큰이 유효하지 않음
+    NO_DATA(1408,"no data");
 
     private int status;
     private String message;

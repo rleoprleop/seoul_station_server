@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StageRequestDTO {
+public class StageGetRequestDTO {
     private String userId;
-    private Long stageId;
+    private Long id;
 }

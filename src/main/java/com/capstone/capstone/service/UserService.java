@@ -32,8 +32,14 @@ public class UserService {
 
     public Map<String,Object> signUp(UserDTO userDTO) { // 유저 회원가입
         Map<String, Object> result = new HashMap<>();
+        if(userDTO.getUserId().trim().isEmpty() || userDTO.getUserPassword().trim().isEmpty()){
+            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.NO_DATA);
+            result.put("code",commonCodeDTO);
+            return result;
+        }
         Optional<UserVO> byUserId = userMapper.getUserByUserId(userDTO.getUserId());
         Optional<UserVO> byNickName = userMapper.getUserByNickName(userDTO.getNickName());
+
 
         if(byUserId.isPresent()){//같은 userId 있을 경우
             System.out.println(byUserId.get().getUserId());

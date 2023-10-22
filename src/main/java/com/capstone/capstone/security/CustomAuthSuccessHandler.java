@@ -30,6 +30,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
     private final UserMapper userMapper;
     private final PlayerMapper playerMapper;
+    private Map<String,String> useToken;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -40,18 +41,16 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         System.out.println(byUserId);
         UserVO userVO = byUserId.get();
         System.out.println(userVO.getUserId()+userVO.getUserPassword()+userVO.getNickName());
-        Optional<PlayerVO> playerVOOptional = playerMapper.getPlayerById(userVO.getId());
-        PlayerVO playerVO = playerVOOptional.get();
         HashMap<String, Object> responseMap = new HashMap<>();
 
         JSONObject jsonObject;
         CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_SIGN_IN);
         responseMap.put("code",setCommonCode(commonCodeDTO));
-        responseMap.put("player",setPlayerCode(playerVO));
         responseMap.put("user", setUserCode(userVO));
         jsonObject = new JSONObject(responseMap);
 
         String token = JwtTokenProvider.generateToken(userVO);
+
         jsonObject.put("token", token);
 
 
@@ -73,13 +72,6 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         return code;
     }
 
-    public Map<String,Object> setPlayerCode(PlayerVO playerVO) {
-        HashMap<String, Object> code = new HashMap<>();
-        code.put("health",playerVO.getHealth());
-        code.put("stage",playerVO.getStage());
-
-        return code;
-    }
 
     public Map<String,Object> setCommonCode(CommonCodeDTO commonCodeDTO){
         HashMap<String, Object> code = new HashMap<>();
