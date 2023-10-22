@@ -12,6 +12,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -20,7 +23,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -60,7 +66,34 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         else*/
         //...
         if (header != null && !header.equalsIgnoreCase("")) {
-
+//            BufferedReader br=null;
+//            String line="";
+//            StringBuilder stringBuilder = new StringBuilder();
+//            String bodyJson="";
+//            try{
+//                InputStream inputStream = request.getInputStream();
+//                if(inputStream != null){
+//                    br=new BufferedReader(new InputStreamReader(inputStream));
+//                    while((line=br.readLine())!=null){
+//                        stringBuilder.append(line);
+//                    }
+//                }
+//                else{
+//                    log.info("데이터 없음");
+//                }
+//            }catch (IOException e){
+//                e.printStackTrace();
+//            }
+//            bodyJson = stringBuilder.toString();
+//            JSONParser jsonParser = new JSONParser();
+//            JSONObject jsonObject = null;
+//            try {
+//                jsonObject = (JSONObject) jsonParser.parse(bodyJson);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//            String userId = (String) jsonObject.get("userId");
             // [STEP2] Header 내에 토큰을 추출합니다.
             String token = JwtTokenProvider.getTokenFromHeader(header);
 
@@ -68,11 +101,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             if (JwtTokenProvider.validateToken(token)) {
 
                 // [STEP4] 토큰을 기반으로 사용자 아이디를 반환 받는 메서드
-                String userId = JwtTokenProvider.getUserIdFromToken(token);
-                log.info("userId Check: {}",userId);
-
+                String tokenUserId = JwtTokenProvider.getUserIdFromToken(token);
+//                log.info("userId Check: {}, {}",tokenUserId, userId);
+//
+//                if(tokenUserId != userId){
+//                    setErrorResponse(response, CommonCode.TOKEN_INVALID);
+//                }
                 // [STEP5] 사용자 아이디가 존재하는지 여부 체크
-                if (userId != null && !userId.equalsIgnoreCase("")) {
+                if (tokenUserId != null && !tokenUserId.equalsIgnoreCase("")) {
                     chain.doFilter(request, response);
                 } else {
                     setErrorResponse(response, CommonCode.NOT_FOUND_USER_ID);

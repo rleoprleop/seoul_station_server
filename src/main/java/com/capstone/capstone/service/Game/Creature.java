@@ -16,27 +16,30 @@ public class Creature {
     private int idleLoop;// = 0;
     private int walkingLoop;// = 0;
     private int attackLoop;// = 0;
+    private int deathLoop;
     //각 동작의 현재 몇 번째 컷인지 알려주는 정보
     private int idleCut;// = 0;
     private int walkingCut;// = 0;
     private int attackCut;// = 0;
+    private int deathCut;
 
-        //각 동작의 현재 몇 번째 프레임인지 알려주는 정보
+    //각 동작의 현재 몇 번째 프레임인지 알려주는 정보
     private int idleCount;// = 0;
     private int walkingCount;// = 0;
     private int attackCount;// = 0;
+    private int deathCount;
 
-
-        //해당 플레이어의 키보드 입력에 영향을 받는 속성들
+    //해당 플레이어의 키보드 입력에 영향을 받는 속성들
     private Vel vel;
 
     //맞았는지 여부
     private boolean damaged;// = false;
-//    private int damagedCount;// = 0;
+    private int damagedCount;// = 0;
 
     //체력
     private int healthMax;// = 3;
     private int healthCount;// = 3;// this.healthMax;
+    private boolean dead;
 
     public Creature(int x, int y, int width, int height, int canvasLength, int healthMax) {
         this.x=x;
@@ -49,20 +52,24 @@ public class Creature {
         idleLoop=0;
         walkingLoop=0;
         attackLoop=0;
+        deathLoop=0;
 
         idleCut=0;
         walkingCut=0;
         attackCut=0;
+        deathCut=0;
 
         idleCount=0;
         walkingCount=0;
         attackCount=0;
+        deathCount=0;
 
         damaged =false;
-//        damagedCount=0;
+        damagedCount=0;
 
         this.healthMax=healthMax;
         healthCount=healthMax;
+        dead=false;
     }
 
 
@@ -85,10 +92,11 @@ public class Creature {
         attackBox.setHeight(height);
     }
 
-    public void setLoops(int idle, int walking, int attack) {
+    public void setLoops(int idle, int walking, int attack, int death) {
         idleLoop = idle;
         walkingLoop = walking;
         attackLoop = attack;
+        deathLoop = death;
     }
 
     public void setCounts(int idleC, int walkingC, int attackC) {
@@ -97,7 +105,7 @@ public class Creature {
         attackCount = attackC;
     }
 
-    public void subHealth(int i){
+    public void subHealthCount(int i){
         healthCount-=i;
     }
     public void addX(int i){
@@ -134,4 +142,10 @@ public class Creature {
     public void addWalkingCut(int i) {
         walkingCut+=i;
     }
+
+    public void addDeathCut(int i) {
+        deathCut+=i;
+    }
+    public void addDeathCount(int i){deathCount+=i;}
+
 }

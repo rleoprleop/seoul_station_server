@@ -10,8 +10,8 @@ public class NormalZombie extends Creature{
     private int move_randNum;
     private int moveCount;
     private int speed;
-    private int xMax_left;
-    private int xMax_right;
+    int xMax_left;
+    int xMax_right;
     private int x_detectLeft;
     private int x_detectRight;
     private int x_attackLeft;
@@ -25,9 +25,9 @@ public class NormalZombie extends Creature{
     private int stunLoop;
     private int waitCount;
     private int deathFrame;
-    private int deathCount;
     private int stageNum;
     private int attackRandomNum;
+    private boolean attackDone;
 
 
     public NormalZombie(int x, int y, int widgh, int height, int canvasLength,int healthMax){
@@ -50,10 +50,10 @@ public class NormalZombie extends Creature{
         stunAnimaitonCount = 0;
         stunLoop = 0;
         waitCount = 0;
-        deathCount = 0;
         deathFrame = 0;
         stageNum = 0;
         attackRandomNum = 0;
+        attackDone = true;
     }
     public void setFixedRange(int xMax_left, int xMax_right) {
         this.xMax_left = xMax_left;
@@ -97,12 +97,14 @@ public class NormalZombie extends Creature{
         if(attackRandomNum>=6){
             if (getVel().isLookingRight()) { // 오른쪽 보고있는 경우
                 if (getAttackBox().getAtkTimer() <= getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 100, 프레임당 2. 50프레임 소모
+                    attackDone=false;
                     //공격 상자 늘리기 전에 플레이어들의 방어 확인
                     if (p1.getVel().isBlocking() && !p1.getVel().isLookingRight() &&(getAttackBox().getPosition_x() + getAttackBox().getAtkTimer() + 6) >= p1.getBlockBox().getX_left()) {
                         // 플레이어1의 왼쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
                         stunned = true;
                         getVel().setAttacking(false);
                         getAttackBox().setAtkTimer(0);
+                        attackDone=true;
                     }
 
                     if (p2.getVel().isBlocking() && !p2.getVel().isLookingRight() &&(getAttackBox().getPosition_x() + getAttackBox().getAtkTimer() + 6) >= p2.getBlockBox().getX_left()) {
@@ -110,6 +112,7 @@ public class NormalZombie extends Creature{
                         stunned = true;
                         getVel().setAttacking(false);
                         getAttackBox().setAtkTimer(0);
+                        attackDone=true;
                     }
                     else {
                         if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
@@ -139,12 +142,15 @@ public class NormalZombie extends Creature{
                 }
 
                 else { //공격 종료
+                    attackDone=true;
                     if (p1.isDamaged()) { //플레이어1이 해당 몬스터의 공격을 받았을 경우
-                        p1.subHealth(1);
+                        p1.subHealthCount(1);
+                        p1.checkIsDead();
                     }
 
                     if (p2.isDamaged()) {
-                        p2.subHealth(1);
+                        p2.subHealthCount(1);
+                        p2.checkIsDead();
                     }
 
                     //몬스터 공격 정보 초기화
@@ -157,18 +163,21 @@ public class NormalZombie extends Creature{
 
             else { //왼쪽을 보고 있는 경우
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //왼쪽 공격 진행중
+                    attackDone=false;
                     //공격 상자 늘리기 전에 플레이어의 방어 확인
                     if (p1.getVel().isBlocking() && p1.getVel().isLookingRight() && (getAttackBox().getPosition_x() - getAttackBox().getAtkTimer() - 6) <= p1.getBlockBox().getX_right()) {
                         // 플레이어1의 오른쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
                         stunned = true;
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
+                        attackDone=true;
                     }
                     if (p2.getVel().isBlocking() && p2.getVel().isLookingRight() && (this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() - 6) <= p2.getBlockBox().getX_right()) {
                         // 플레이어2의 오른쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
                         stunned = true;
                         getVel().setAttacking(false);
                         getAttackBox().setAtkTimer(0);
+                        attackDone=true;
                     }
                     else {
                         if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
@@ -197,11 +206,14 @@ public class NormalZombie extends Creature{
                 }
 
                 else { //공격 종료
+                    attackDone=true;
                     if (p1.isDamaged() == true) { //플레이어1이 해당 몬스터의 공격을 받았을 경우
-                        p1.subHealth(1);
+                        p1.subHealthCount(1);
+                        p1.checkIsDead();
                     }
                     if (p2.isDamaged() == true) { //플레이어2가 해당 몬스터의 공격을 받았을 경우
-                        p2.subHealth(1);
+                        p2.subHealthCount(1);
+                        p2.checkIsDead();
                     }
 
                     //몬스터 공격 정보 초기화
@@ -212,10 +224,10 @@ public class NormalZombie extends Creature{
                 }
             }
         }
-        else if(attackRandomNum>=0){
+        else if(attackRandomNum>=0){ // 5, 4, 3, 2, 1, 0 -> 방어 불가 공격
             if (getVel().isLookingRight()) { // 오른쪽 보고있는 경우
                 if (getAttackBox().getAtkTimer() <= getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 100, 프레임당 2. 50프레임 소모
-
+                    attackDone=false;
                     if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
                         this.waitCount++;
                     }
@@ -243,12 +255,15 @@ public class NormalZombie extends Creature{
                 }
 
                 else { //공격 종료
+                    attackDone=true;
                     if (p1.isDamaged()) { //플레이어1이 해당 몬스터의 공격을 받았을 경우
-                        p1.subHealth(1);
+                        p1.subHealthCount(1);
+                        p1.checkIsDead();
                     }
 
                     if (p2.isDamaged()) {
-                        p2.subHealth(1);
+                        p2.subHealthCount(1);
+                        p2.checkIsDead();
                     }
 
                     //몬스터 공격 정보 초기화
@@ -261,6 +276,7 @@ public class NormalZombie extends Creature{
 
             else { //왼쪽을 보고 있는 경우
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //왼쪽 공격 진행중
+                    attackDone=false;
                     if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
                         this.waitCount++;
                     }
@@ -286,11 +302,14 @@ public class NormalZombie extends Creature{
                 }
 
                 else { //공격 종료
+                    attackDone=true;
                     if (p1.isDamaged() == true) { //플레이어1이 해당 몬스터의 공격을 받았을 경우
-                        p1.subHealth(1);
+                        p1.subHealthCount(1);
+                        p1.checkIsDead();
                     }
                     if (p2.isDamaged() == true) { //플레이어2가 해당 몬스터의 공격을 받았을 경우
-                        p2.subHealth(1);
+                        p2.subHealthCount(1);
+                        p2.checkIsDead();
                     }
 
                     //몬스터 공격 정보 초기화
@@ -304,7 +323,7 @@ public class NormalZombie extends Creature{
 
     }
 
-    public void move(int bigX, int smallX, int[] collisonCheckX) {
+    public void move(int bigX, int smallX, int[] collisonCheckX, int currentStageNum) {
 
         //몹의 공격 범위 갱신
         this.x_detectLeft = this.getX() - 150;
@@ -417,7 +436,7 @@ public class NormalZombie extends Creature{
                             }
                         }
 
-                        else if (this.moveCount >= this.move_randNum) {
+                        else if(this.moveCount >= this.move_randNum) {
                             this.getVel().setMoving(false);
                             this.movingDone = true;
                             this.moveCount = 0;
@@ -427,7 +446,7 @@ public class NormalZombie extends Creature{
             }
         }
 
-        else if (this.dead) { //몹이 죽었을 경우
+        else if (this.dead || (this.stageNum != currentStageNum)) { //몹이 죽었을 경우
             for (int j = 0; j <= this.getWidth(); j++) {
                 collisonCheckX[this.getX() + j] = -1;
             }
@@ -436,10 +455,68 @@ public class NormalZombie extends Creature{
 
     public void checkAttacked(int atkTimer_p1,int[] collisonCheckX) {//공격이 해당 물체에 가해졌는지 확인
         if ((collisonCheckX[atkTimer_p1] == 1) && (this.getX() <= atkTimer_p1 && atkTimer_p1 <= this.getX() + this.getCanvasLength()) && !this.dead) {
-            this.subHealth(1);
+            this.subHealthCount(1);
             if (this.getHealthCount() == 0) {
                 this.dead = true;
             }
+        }
+    }
+    public void  updateAnimation(int currentStageNum) {
+        //NormalZombie 애니메이션 변수
+        if (this.dead == false && this.stageNum == currentStageNum) {
+            if (this.getVel().isMoving() == false) {
+                //플레이어가 해당 몬스터의 공격을 막았을 경우
+                if (this.stunned == true) {
+                    if (this.stunCount % 40 == 39) {
+                        this.stunAnimaitonCount++;
+                        this.stunAnimaitonCount = this.stunAnimaitonCount % this.stunLoop;
+                    }
+                }
+                //텀이 지나고 다시 공격하는 경우
+                else if (this.getVel().isAttacking() == true && this.waitCount == 30) {
+                    if (this.attackFrame < 10) {
+                        this.attackFrame++;
+                    }
+                    else if (this.attackFrame == 10) {
+                        this.attackFrame = 0;
+                        if (this.getAttackCount() < this.getAttackLoop() - 1) {
+                            this.addAttackCount(1);
+                        }
+                        else {
+                            this.setAttackCount(0);
+                        }
+                    }
+                }
+                //가만히 서 있는 경우
+                else {
+                    if(this.getIdleCount() == 30) {
+                        this.setIdleCount(0);
+                        this.addIdleCut(1);
+                        this.setIdleCut(this.getIdleCut() % this.getIdleLoop());
+                    }
+                    this.addIdleCount(1);
+                }
+            }
+
+            else if (this.getVel().isMoving() == true) {
+                if (this.getWalkingCount() == 30) {
+                    this.setWalkingCount(0);
+                    this.addWalkingCut(1);
+                    this.setWalkingCut(this.getWalkingCut() % this.getWalkingLoop());
+                }
+                this.addWalkingCount(1);
+            }
+        }
+        else if (this.dead == true) {
+            if (this.getDeathCount() == 30 && this.getDeathCut() < this.getDeathLoop()) {
+                this.setDeathCount(0);
+                this.addDeathCut(1);
+            }
+
+            else if (this.getDeathCount() < 30) {
+                this.addDeathCount(1);
+            }
+
         }
     }
 
@@ -458,7 +535,11 @@ public class NormalZombie extends Creature{
         deathFrame+=i;
     }
 
-    public void addDeathCount(int i){
-        deathCount+=i;
+    protected void addWaitCount(int i) {
+        waitCount+=i;
+    }
+
+    protected void addMoveCount(int i) {
+        moveCount+=i;
     }
 }

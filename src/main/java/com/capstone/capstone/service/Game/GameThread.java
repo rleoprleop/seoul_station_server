@@ -7,7 +7,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +32,12 @@ public class GameThread {//게임 시작.
         return System.currentTimeMillis() - room.getTime();
     }
 
+    private void checkActive(Room room, String roomId){
+        if(!room.isActive()){
+            getThread(roomId).interrupt();
+            simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,"game over");
+        }
+    }
     public Thread gameRoomThread(String roomId, Room room, String userId1, String userId2){
         ObjectMapper mapper = new ObjectMapper();
         Thread t = new Thread(() -> {
@@ -44,6 +49,7 @@ public class GameThread {//게임 시작.
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         mapper.writeValue(baos, room);
                         gameUtil.gameLoop(room,userId1,userId2);
+                        checkActive(room,roomId);
                         log.info("Room: {}", baos.toString());
                         log.info("roomId {}",roomId);
 //                        room.setTime(roomTime(room,roomId));
@@ -54,7 +60,7 @@ public class GameThread {//게임 시작.
                         throw new RuntimeException(e);
                     }
                     log.debug("2--------------------------------------");
-                    Thread.sleep(16);
+                    Thread.sleep(14);
                     log.debug("3--------------------------------------");
                 }
             }
