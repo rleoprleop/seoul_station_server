@@ -42,7 +42,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         List<String> list = Arrays.asList(
                 "/user/delete-user",
                 "/user/password-change",
-                "/wait-service/waitroom/create"
+                "/wait-service/waitroom/create",
+                "/stage/get",
+                "/stage/set"
         );
 
         System.out.println(request.getRequestURI());
