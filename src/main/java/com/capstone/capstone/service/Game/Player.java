@@ -66,7 +66,7 @@ public class Player extends Creature{
         setX(x);
         getBlockBox().setX_right(x+canvasLength-10);
         getBlockBox().setX_left(x+10);
-        getAttackBox().subPosition_x(x+canvasLength/2);
+        getAttackBox().setPosition_x(x+canvasLength/2);
 
     }
 
