@@ -35,7 +35,7 @@ public class GameThread {//게임 시작.
     private void checkActive(Room room, String roomId){
         if(!room.isActive()){
             getThread(roomId).interrupt();
-            simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,"game over");
+            simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,room);
         }
     }
     public Thread gameRoomThread(String roomId, Room room, String userId1, String userId2){

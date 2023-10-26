@@ -2,9 +2,11 @@ package com.capstone.capstone.service.Game;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 @Getter
 @Setter
+@Slf4j
 public class NormalZombie extends Creature{
     private int move_range;
     private int move_randNum;
@@ -51,7 +53,7 @@ public class NormalZombie extends Creature{
         stunLoop = 0;
         waitCount = 0;
         deathFrame = 0;
-        stageNum = 0;
+        stageNum = 1;
         attackRandomNum = 0;
         attackDone = true;
     }
@@ -339,7 +341,7 @@ public class NormalZombie extends Creature{
         }
 
 
-        if (!this.dead && !this.getVel().isAttacking() && !this.stunned) { // 몹이 살아있으면 움직임
+        if (this.dead == false && this.getVel().isAttacking() == false && this.stunned == false && this.stageNum == currentStageNum) {
             for (int i = 0; i <= this.getCanvasLength() - 100; i++) {
                 collisonCheckX[this.getX() + 50 + i] = 1;
             }
@@ -349,7 +351,7 @@ public class NormalZombie extends Creature{
             if((this.x_detectLeft <= bigX && bigX <= this.getX() + 50) || (this.getX() + this.getCanvasLength() - 50 <= smallX && smallX <= this.x_detectRight)) {
                 //플레이어가 공격 범위 안에 들어온 경우
                 if ((this.x_attackLeft <= bigX && bigX <= this.getX() + 50) || (this.getX() + this.getCanvasLength() - 50 <= smallX && smallX <= this.x_attackRight)) {
-                    if (this.x_attackLeft <= bigX && bigX <= this.getX() + 50) { // 왼쪽 방향으로 감지 했을 경우
+                    if (this.x_attackLeft <= bigX && bigX <= this.getX() + 100) { // 왼쪽 방향으로 감지 했을 경우
                         this.getVel().setLookingRight(false);
                     }
                     else { //오른쪽으로 감지 했을 경우
@@ -447,6 +449,7 @@ public class NormalZombie extends Creature{
         }
 
         else if (this.dead || (this.stageNum != currentStageNum)) { //몹이 죽었을 경우
+            log.info("{}",getX());
             for (int j = 0; j <= this.getWidth(); j++) {
                 collisonCheckX[this.getX() + j] = -1;
             }
