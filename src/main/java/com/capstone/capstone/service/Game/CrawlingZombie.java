@@ -34,7 +34,7 @@ public class CrawlingZombie extends NormalZombie{
     private int smallX;
     CrawlingZombie(int x, int y, int width, int height, int canvasLength, int healthMax){
         super(x,y,width,height,canvasLength,healthMax);
-        this.stageNum = 1;
+        this.stageNum = 3;
         this.rangedAttack_left = x - 400;
         this.rangedAttack_right = x + canvasLength + 400;
         this.spitting = false;
@@ -419,10 +419,27 @@ public class CrawlingZombie extends NormalZombie{
                 }
             }
         }
+        else if (this.isDead() == true || this.stageNum != currentStageNum) { // 죽었거나 해당 스테이지가 아닐때
+            for (int i = 0; i <= this.getWidth(); i++) {
+                collisonCheckX[this.getX() + i] = -1;
+            }
+        }
     }
     public void updateAnimation(int currentStageNum) {
         //crawlingZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
+            if (this.getWaitCount() >= 110) {// 투사체 떨어지는 부분. 실질적으로 데미지 입는 시간은 waitCount 120부터
+                if (this.poisonFallingCount == 10) {
+                    this.poisonFallingCut++;
+                    this.poisonFallingCount = 0;
+                    if (this.poisonFallingCut == 4) {
+                        this.poisonFallingCut = 0;
+                    }
+                }
+                else {
+                    this.poisonFallingCount++;
+                }
+            }
             if (this.getVel().isMoving() == false) {
                 //플레이어가 해당 몬스터의 공격을 막았을 경우
                 if (this.isStunned() == true) {
@@ -445,18 +462,6 @@ public class CrawlingZombie extends NormalZombie{
                             this.spittingCount++;
                         }
 
-                    }
-                    else if (this.getWaitCount() >= 110) {// 투사체 떨어지는 부분. 실질적으로 데미지 입는 시간은 waitCount 120부터
-                        if (this.poisonFallingCount == 10) {
-                            this.poisonFallingCut++;
-                            this.poisonFallingCount = 0;
-                            if (this.poisonFallingCut == 4) {
-                                this.spittingCut = 0;
-                            }
-                        }
-                        else {
-                            this.poisonFallingCount++;
-                        }
                     }
 
                 }

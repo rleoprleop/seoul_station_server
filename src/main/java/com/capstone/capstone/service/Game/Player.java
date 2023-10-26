@@ -69,4 +69,8 @@ public class Player extends Creature{
         getAttackBox().subPosition_x(x+canvasLength/2);
 
     }
+
+    public void subAttackTimer(int i) {
+        attackTimer-=i;
+    }
 }

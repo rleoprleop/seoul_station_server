@@ -103,7 +103,9 @@ public class WebSocketService {
             log.info("remove!!!");
             active.remove(roomId);
             gameRoom.removeRoom(roomId);
-            gameThread.getThread(roomId).interrupt();
+            if(gameThread.getThread(roomId)!=null){
+                gameThread.getThread(roomId).interrupt();
+            }
             simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId,"game over");
         }
 

@@ -19,7 +19,7 @@ public class RunningZombie extends NormalZombie{
     private int deathCount;
     RunningZombie(int x, int y, int width, int height, int canvasLength, int healthMax){
         super(x,y,width,height,canvasLength,healthMax);
-        this.stageNum = 1;
+        this.stageNum = 2;
         this.running = false;
         this.grabbing = false;
 
@@ -88,7 +88,7 @@ public class RunningZombie extends NormalZombie{
                     p1.subHealthCount(1);
                     p1.checkIsDead();
                 }
-                else {
+                else if(p2.isGrabbed() == true){
                     p2.subHealthCount(1);
                     p2.checkIsDead();
                 }
