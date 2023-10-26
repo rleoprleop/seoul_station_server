@@ -851,10 +851,11 @@ public class GameUtil {
         //스테이지 이동 로직 -> 오른쪽으로만 이동
         log.info("bgx: {}, bgmx: {}, bigx: {}, canvaswidth: {}",bg.getBg_x(), bg.getBg_xMax(), bigX+40, canvasWidth-10);
         if ((bg.getBg_x() == bg.getBg_xMax() || bg.getBg_x()==0) && bigX + 40 == canvasWidth - 10) { //둘 중 한명이 맵 오른쪽 끝까지 가는 경우
-            p1.initPlayerPoint(100,canvasWidth);
-            p2.initPlayerPoint(300,canvasWidth);
+            p1.initPlayerPoint(100,200);
+            p2.initPlayerPoint(300,200);
             room.addCurrentStageNum(1);
             bg.setBg_x(0);
+            Arrays.fill(collisonCheckX,-1);
         }
     }
 
