@@ -25,12 +25,14 @@ public class NormalZombie extends Creature{
     private int stunCount;
     private int stunAnimaitonCount;
     private int stunLoop;
+    private int deathLoop;
     private int waitCount;
+    private int deathCount;
     private int deathFrame;
     private int stageNum;
     private int attackRandomNum;
     private boolean attackDone;
-
+    private int deathCut;
 
     public NormalZombie(int x, int y, int widgh, int height, int canvasLength,int healthMax){
         super(x,y,widgh,height,canvasLength,healthMax);
@@ -52,6 +54,9 @@ public class NormalZombie extends Creature{
         stunAnimaitonCount = 0;
         stunLoop = 0;
         waitCount = 0;
+        deathCount = 0;
+        deathLoop = 0;
+        deathCut = 0;
         deathFrame = 0;
         stageNum = 1;
         attackRandomNum = 0;
@@ -510,16 +515,14 @@ public class NormalZombie extends Creature{
                 this.addWalkingCount(1);
             }
         }
-        else if (this.dead == true) {
-            if (this.getDeathCount() == 30 && this.getDeathCut() < this.getDeathLoop()) {
-                this.setDeathCount(0);
-                this.addDeathCut(1);
+        else if (this.isDead() == true) {
+            if (this.deathCount == 30 && this.deathCut < this.deathLoop) {
+                this.deathCount = 0;
+                this.deathCut++;
             }
-
-            else if (this.getDeathCount() < 30) {
-                this.addDeathCount(1);
+            else if (this.deathCount < 30) {
+                this.deathCount++;
             }
-
         }
     }
 
