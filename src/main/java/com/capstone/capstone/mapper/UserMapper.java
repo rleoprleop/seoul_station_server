@@ -16,7 +16,7 @@ public interface UserMapper {
 
     Optional<UserVO> getUserByUserId(String userId);
 
-    Optional<UserVO> getUserByNickName(String nickName);
+//    Optional<UserVO> getUserByNickName(String nickName);
 
     Optional<UserJoinRolesVO> getUserJoinRoles(String userId);
 

@@ -13,7 +13,7 @@ public class UserVO {
     private Long id;
     private String userId;
     private String userPassword;
-    private String nickName;
+//    private String nickName;
     private LocalDateTime modifiedDate;
     private LocalDateTime createDate;
 }

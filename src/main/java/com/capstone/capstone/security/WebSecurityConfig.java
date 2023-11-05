@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -27,8 +28,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     //private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserMapper userMapper;
     private final PlayerMapper playerMapper;
+    private final RedisTemplate redisTemplate;
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -91,7 +95,7 @@ public class WebSecurityConfig {
 
     @Bean
     public CustomAuthSuccessHandler customLoginSuccessHandler() {
-        return new CustomAuthSuccessHandler(userMapper,playerMapper);
+        return new CustomAuthSuccessHandler(jwtTokenProvider, userMapper, playerMapper, redisTemplate);
     }
 
     @Bean
@@ -100,7 +104,7 @@ public class WebSecurityConfig {
     }
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter();
+        return new JwtAuthorizationFilter(jwtTokenProvider);
     }
 
     @Bean

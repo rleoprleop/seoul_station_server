@@ -3,10 +3,12 @@ package com.capstone.capstone.controller;
 import com.capstone.capstone.dto.UserDTO;
 import com.capstone.capstone.dto.UserDeleteDTO;
 import com.capstone.capstone.dto.UserPasswordChangeDTO;
-import com.capstone.capstone.dto.UserResponseDTO;
+//import com.capstone.capstone.dto.UserResponseDTO;
 import com.capstone.capstone.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.Map;
 @RestController //rest api 처리하는 controller
 @RequiredArgsConstructor // 자동 생성자 주입
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
     private final UserService userService;
     @PostMapping("/sign-up")
@@ -42,6 +45,12 @@ public class UserController {
     @PostMapping("/delete-user")
     public ResponseEntity<Map<String,Object>> deleteUser(final @RequestBody UserDeleteDTO userDeleteDTO) {
         Map<String, Object> result = userService.deleteUser(userDeleteDTO);
+        return ResponseEntity.ok().body(result);
+    }
+    @PostMapping("/refresh")
+    public ResponseEntity<Map<String,Object>> refreshAuthentication(final @RequestHeader("UserId") String userId) {
+        log.info("refresh, {}", userId);
+        Map<String, Object> result = userService.refreshAuthentication(userId);
         return ResponseEntity.ok().body(result);
     }
 }

@@ -1,80 +1,87 @@
 package com.capstone.capstone.security;
 
 import com.capstone.capstone.VO.UserVO;
-import com.capstone.capstone.dto.TokenInfo;
-import com.capstone.capstone.dto.UserDTO;
+//import com.capstone.capstone.dto.TokenInfo;
 //import com.capstone.capstone.entity.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
+@Component
 public class JwtTokenProvider {
 
-    private static final String secretKey="seA3S45Enke7sla4Ase6k5pqEW2e35485t0eFEFlksdvuJI34iroOa354gj73653305s8k6dRW6n5x24m1cz";
-    private static final int tokenTime = 10 * 60 * 100000; //분 초. 10분
-    private static Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+    @Value("${spring.jwt.key}")
+    private String secretKey;
+
+    @Value("${spring.jwt.tokenTime}")
+    private int tokenTime; //분 초. 10분
+    @Value("${spring.jwt.refreshTokenTime}")
+    private int refreshTokenTime; //분 초. 1시간
+
 
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
-    public static String generateToken(UserVO userVO){
+    public Map<String, String> generateToken(String userId){
+        Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        Map<String,String> token = new HashMap<>();
         // 권한 가져오기
-        /*String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-
-        long now = (new Date()).getTime();
-        // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + tokenTime);
+//        String authorities = authentication.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .collect(Collectors.joining(","));
+//
+//        long now = (new Date()).getTime();
+//        // Access Token 생성
+//        Date accessTokenExpiresIn = new Date(now + tokenTime);
         String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("auth", authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+                .setHeader(createHeader())                              // Header 구성
+                .setClaims(createClaims(userId))                       // Payload - Claims 구성
+                .setSubject(userId)        // Payload - Subject 구성
+                .signWith(key, SignatureAlgorithm.HS256)  // Signature 구성
+                .setExpiration(createExpiredDate())
+                .compact();                    // Expired Date 구성
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + tokenTime))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-
-        return TokenInfo.builder()
-                .grantType("Bearer")
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();*/
-        JwtBuilder builder = Jwts.builder()
                 .setHeader(createHeader())                              // Header 구성
-                .setClaims(createClaims(userVO))                       // Payload - Claims 구성
-                .setSubject(String.valueOf(userVO.getUserId()))        // Payload - Subject 구성
+                .setClaims(createClaims(userId))                       // Payload - Claims 구성
+                .setSubject(userId)        // Payload - Subject 구성
                 .signWith(key, SignatureAlgorithm.HS256)  // Signature 구성
-                .setExpiration(createExpiredDate());                    // Expired Date 구성
-        return builder.compact();
+                .setExpiration(createRefreshExpiredDate())
+                .compact();
+        token.put("token",accessToken);
+        token.put("refreshToken",refreshToken);
+        return token;
+//        JwtBuilder builder = Jwts.builder()
+//                .setHeader(createHeader())                              // Header 구성
+//                .setClaims(createClaims(userVO))                       // Payload - Claims 구성
+//                .setSubject(String.valueOf(userVO.getUserId()))        // Payload - Subject 구성
+//                .signWith(key, SignatureAlgorithm.HS256)  // Signature 구성
+//                .setExpiration(createExpiredDate());                    // Expired Date 구성
+//        return builder.compact();
     }
 
-    private static Date createExpiredDate() {
+    private Date createExpiredDate() {
+        log.info("token time: {}",tokenTime);
         long now = (new Date()).getTime();
         Date date = new Date(now + tokenTime);
         return date;
     }
 
-    private static Map<String, Object> createHeader() {
+    private Date createRefreshExpiredDate() {
+        log.info("refresh token time: {}",refreshTokenTime);
+        long now = (new Date()).getTime();
+        Date date = new Date(now + refreshTokenTime);
+        return date;
+    }
+
+    private Map<String, Object> createHeader() {
         Map<String, Object> header = new HashMap<>();
 
         header.put("typ", "JWT");
@@ -83,15 +90,15 @@ public class JwtTokenProvider {
         return header;
     }
 
-    private static Map<String, Object> createClaims(UserVO userVO) {
+    private Map<String, Object> createClaims(String userId) {
         // 공개 클레임에 사용자의 이름과 이메일을 설정하여 정보를 조회할 수 있다.
         Map<String, Object> claims = new HashMap<>();
 
-        log.info("userId :" + userVO.getUserId());
-        log.info("nickName :" + userVO.getNickName());
+        log.info("userId :" + userId);
+//        log.info("nickName :" + userVO.getNickName());
 
-        claims.put("userId", userVO.getUserId());
-        claims.put("nickName", userVO.getNickName());
+        claims.put("userId", userId);
+//        claims.put("nickName", userVO.getNickName());
         return claims;
     }
 
@@ -117,7 +124,7 @@ public class JwtTokenProvider {
     }*/
 
     // 토큰 정보를 검증하는 메서드
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Claims claims = getClaimsFormToken(token);
             return true;
@@ -133,7 +140,8 @@ public class JwtTokenProvider {
         }
     }
 
-    private static Claims parseClaims(String accessToken) {
+    private Claims parseClaims(String accessToken) {
+        Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
@@ -141,16 +149,17 @@ public class JwtTokenProvider {
         }
     }
 
-    private static Claims getClaimsFormToken(String token) {
+    private Claims getClaimsFormToken(String token) {
+        Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public static String getUserIdFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         Claims claims = getClaimsFormToken(token);
         return claims.get("userId").toString();
     }
 
-    public static String getTokenFromHeader(String header) {
+    public String getTokenFromHeader(String header) {
         return header.split(" ")[1];
     }
 }

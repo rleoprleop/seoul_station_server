@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,30 +28,27 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Slf4j
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
+    private final JwtTokenProvider jwtTokenProvider;
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws IOException, ServletException {
         // 1. Request Header 에서 JWT 토큰 추출
         String header = request.getHeader("Authorization");
         List<String> list = Arrays.asList(
-                "/user/delete-user",
-                "/user/password-change",
-                "/wait-service/waitroom/create",
-                "/stage/get",
-                "/stage/set"
+                "/user/sign-in",
+                "/user/sign-up"
         );
 
         System.out.println(request.getRequestURI());
 
         // 2. 토큰이 필요하지 않은 API URL의 경우 => 로직 처리 없이 다음 필터로 이동
-        if (!list.contains(request.getRequestURI())) {
+        if (list.contains(request.getRequestURI())) {
             System.out.println("1111"+request.getRequestURI());
             chain.doFilter(request, response);
             return;
@@ -97,13 +95,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 //
 //            String userId = (String) jsonObject.get("userId");
             // [STEP2] Header 내에 토큰을 추출합니다.
-            String token = JwtTokenProvider.getTokenFromHeader(header);
+            String token = jwtTokenProvider.getTokenFromHeader(header);
 
             // [STEP3] 추출한 토큰이 유효한지 여부를 체크합니다.
-            if (JwtTokenProvider.validateToken(token)) {
+            if (jwtTokenProvider.validateToken(token)) {
 
                 // [STEP4] 토큰을 기반으로 사용자 아이디를 반환 받는 메서드
-                String tokenUserId = JwtTokenProvider.getUserIdFromToken(token);
+                String tokenUserId = jwtTokenProvider.getUserIdFromToken(token);
 //                log.info("userId Check: {}, {}",tokenUserId, userId);
 //
 //                if(tokenUserId != userId){
@@ -147,15 +145,25 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // Request Header 에서 토큰 정보 추출
     private void setErrorResponse(HttpServletResponse response, CommonCode commonCode){
+        HashMap<String, Object> responseMap = new HashMap<>();
+
         ObjectMapper objectMapper = new ObjectMapper();
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(commonCode);
+        responseMap.put("code",setCommonCode(commonCodeDTO));
         try{
-            response.getWriter().write(objectMapper.writeValueAsString(commonCodeDTO));
+            response.getWriter().write(objectMapper.writeValueAsString(responseMap));
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+    public Map<String,Object> setCommonCode(CommonCodeDTO commonCodeDTO){
+        HashMap<String, Object> code = new HashMap<>();
+
+        code.put("message", commonCodeDTO.getMessage());
+        code.put("status",commonCodeDTO.getStatus());
+        return code;
     }
 
 }
