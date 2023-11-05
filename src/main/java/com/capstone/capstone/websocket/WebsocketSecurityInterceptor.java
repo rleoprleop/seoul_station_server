@@ -28,6 +28,7 @@ public class WebsocketSecurityInterceptor implements ChannelInterceptor, Applica
 
     //private final WaitRoomFacadeService waitRoomFacadeService;
     //private final AntPathMatcher antPathMatcher;
+    private final JwtTokenProvider jwtTokenProvider;
     private WebSocketService webSocketService;
 
     @Override
@@ -38,11 +39,11 @@ public class WebsocketSecurityInterceptor implements ChannelInterceptor, Applica
         log.info("{}",headerAccessor.getSessionId());
         if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
             String bearer=headerAccessor.getFirstNativeHeader("Authorization");
-            String token = JwtTokenProvider.getTokenFromHeader(bearer);
+            String token = jwtTokenProvider.getTokenFromHeader(bearer);
             System.out.println("token: "+token);
             log.info("header: {}, {}",headerAccessor.getFirstNativeHeader("WaitRoomId"),headerAccessor.getFirstNativeHeader("UserId"),headerAccessor.getSessionId());
             webSocketService.createGame(headerAccessor.getFirstNativeHeader("WaitRoomId"),headerAccessor.getFirstNativeHeader("UserId"),headerAccessor.getSessionId());
-            if(!JwtTokenProvider.validateToken(token)){
+            if(!jwtTokenProvider.validateToken(token)){
                 System.out.println("error!!");
                 throw new MessageDeliveryException("error authorization");
             }

@@ -455,7 +455,7 @@ public class NormalZombie extends Creature{
 
         else if (this.dead || (this.stageNum != currentStageNum)) { //몹이 죽었을 경우
             log.info("{}",getX());
-            for (int j = 0; j <= this.getWidth(); j++) {
+            for (int j = 0; j <= this.getAttackBox().getWidth(); j++) {
                 collisonCheckX[this.getX() + j] = -1;
             }
         }

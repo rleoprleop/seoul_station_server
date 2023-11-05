@@ -15,7 +15,7 @@
         u1_0.id as id,
         u1_0.user_id as userId,
         u1_0.user_password as userPassword,
-        u1_0.nick_name as nickName,
+<!--        u1_0.nick_name as nickName,-->
         u1_0.modified_date as modifiedDate,
         u1_0.create_date as createDate
         from
@@ -29,7 +29,7 @@
         u1_0.id as id,
         u1_0.user_id as userId,
         u1_0.user_password as userPassword,
-        u1_0.nick_name as nickName,
+<!--        u1_0.nick_name as nickName,-->
         u1_0.modified_date as modifiedDate,
         u1_0.create_date as createDate
         from
@@ -47,7 +47,7 @@
         u1_0.id as id,
         u1_0.user_id as userId,
         u1_0.user_password as userPassword,
-        u1_0.nick_name as nickName,
+<!--        u1_0.nick_name as nickName,-->
         u1_0.modified_date as modifiedDate,
         u1_0.create_date as createDate,
         u_roles.roles as roles
@@ -62,9 +62,9 @@
     <insert id="createUser" parameterType="UserVO" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert
         into
-        user_table (create_date, modified_date, nick_name, user_id, user_password)
+        user_table (create_date, modified_date,<!-- nick_name, -->user_id, user_password)
         values
-        (#{createDate}, #{modifiedDate}, #{nickName}, #{userId}, #{userPassword});
+        (#{createDate}, #{modifiedDate},<!-- #{nickName},--> #{userId}, #{userPassword});
     </insert>
 
     <insert id="createUserRole" parameterType="UserRolesVO">

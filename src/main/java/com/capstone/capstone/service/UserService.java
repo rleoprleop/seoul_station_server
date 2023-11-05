@@ -10,7 +10,13 @@ import com.capstone.capstone.dto.*;
 import com.capstone.capstone.mapper.PlayerMapper;
 import com.capstone.capstone.mapper.UserMapper;
 import com.capstone.capstone.parameter.UpdateUserPasswordParam;
+import com.capstone.capstone.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,16 +25,20 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     //private final UserRepository userRepository;
-
+    private final RedisTemplate redisTemplate;
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserMapper userMapper;
     private final PlayerMapper playerMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final BCryptPasswordEncoder passwordEncoder;
+    @Value("${spring.jwt.refreshTokenTime}")
+    private int refreshTokenTime; //분 초. 1시간
 
     public Map<String,Object> signUp(UserDTO userDTO) { // 유저 회원가입
         Map<String, Object> result = new HashMap<>();
@@ -38,7 +48,7 @@ public class UserService {
             return result;
         }
         Optional<UserVO> byUserId = userMapper.getUserByUserId(userDTO.getUserId());
-        Optional<UserVO> byNickName = userMapper.getUserByNickName(userDTO.getNickName());
+//        Optional<UserVO> byNickName = userMapper.getUserByNickName(userDTO.getNickName());
 
 
         if(byUserId.isPresent()){//같은 userId 있을 경우
@@ -47,15 +57,15 @@ public class UserService {
             result.put("code",commonCodeDTO);
             return result;
         }
-        if(byNickName.isPresent()){//같은 nickName 있을 경우
-            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SAME_USER_NAME);
-            result.put("code",commonCodeDTO);
-            return result;
-        }
+//        if(byNickName.isPresent()){//같은 nickName 있을 경우
+//            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SAME_USER_NAME);
+//            result.put("code",commonCodeDTO);
+//            return result;
+//        }
         UserVO userVO = UserVO.builder()
                 .userId(userDTO.getUserId())
                 .userPassword(passwordEncoder.encode(userDTO.getUserPassword()))
-                .nickName(userDTO.getNickName())
+//                .nickName(userDTO.getNickName())
                 .createDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .build();
@@ -143,4 +153,17 @@ public class UserService {
     }
 
 
+    public Map<String, Object> refreshAuthentication(String userId) {
+        Map<String,Object> result = new HashMap<>();
+        Map<String,String> token = jwtTokenProvider.generateToken(userId);
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set(userId,token.get("refreshToken"));
+
+        //refresh token time 이후는 db에서 제거
+        redisTemplate.expire(userId,refreshTokenTime, TimeUnit.MILLISECONDS);
+        CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_REFRESH);
+        result.put("code",commonCodeDTO);
+        result.put("token",token);
+        return result;
+    }
 }

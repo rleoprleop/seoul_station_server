@@ -12,7 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -22,15 +27,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
+    private final JwtTokenProvider jwtTokenProvider;
     private final UserMapper userMapper;
     private final PlayerMapper playerMapper;
     private Map<String,String> useToken;
+    private final RedisTemplate redisTemplate;
+    @Value("${spring.jwt.refreshTokenTime}")
+    private int refreshTokenTime;
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
@@ -40,7 +50,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         Optional<UserVO> byUserId = userMapper.getUserByUserId(authentication.getName());
         System.out.println(byUserId);
         UserVO userVO = byUserId.get();
-        System.out.println(userVO.getUserId()+userVO.getUserPassword()+userVO.getNickName());
+//        System.out.println(userVO.getUserId()+userVO.getUserPassword()+userVO.getNickName());
         HashMap<String, Object> responseMap = new HashMap<>();
 
         JSONObject jsonObject;
@@ -49,7 +59,11 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         responseMap.put("user", setUserCode(userVO));
         jsonObject = new JSONObject(responseMap);
 
-        String token = JwtTokenProvider.generateToken(userVO);
+        Map<String,String> token = jwtTokenProvider.generateToken(userVO.getUserId());
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set(userVO.getUserId(),token.get("refreshToken"));
+        //refresh token time 이후는 db에서 제거
+        redisTemplate.expire(userVO.getUserId(),refreshTokenTime, TimeUnit.MILLISECONDS);
 
         jsonObject.put("token", token);
 
@@ -66,7 +80,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         HashMap<String, Object> code = new HashMap<>();
         String userCreateDate = userVO.getCreateDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd.HH:mm:ss"));
         code.put("id",userVO.getId());
-        code.put("userName",userVO.getNickName());
+//        code.put("userName",userVO.getNickName());
         code.put("userCreateDate",userCreateDate);
 
         return code;
