@@ -70,7 +70,8 @@ public class Player extends Creature{
 
     }
     public void setPositionX(int x, int canvasLength){
-        this.getAttackBox().setPosition_x(x+canvasLength/2);
+
+        getAttackBox().setPosition_x(x+canvasLength/2);
     }
 
     public void subAttackTimer(int i) {
