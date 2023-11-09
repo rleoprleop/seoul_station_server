@@ -107,7 +107,7 @@ public class BossZombie extends NormalZombie{
 
     public void flyToTarget(Player p1, Player p2, int[] collisonCheckX) {
         if (this.jumpCount == 1) {
-            for (var i = 0; i <= this.getCanvasLength() - 100; i++) { // 점프 하는 자리 없는 걸로 취급
+            for (int i = 0; i <= this.getCanvasLength() - 100; i++) { // 점프 하는 자리 없는 걸로 취급
                 collisonCheckX[this.getX() + 50 + i] = -1;
             }
         }
@@ -143,13 +143,13 @@ public class BossZombie extends NormalZombie{
                     else if (p1.isDead() == true && p2.isDead() == false) { //p2만 남아있는 경우
                         this.fallingTargetPoint = p2.getX() + p2.getCanvasLength() / 2;
                     }
+                    this.setX(this.fallingTargetPoint - (this.getCanvasLength() / 2)); //위치 갱신
                 }
 
                 else if (this.fallingWarningCount > 0 && this.fallingWarningCount < 150) { //2.5초동안 경고 표시
                     this.fallingWarningCount++;
                 }
                 else if (this.fallingWarningCount == 150) {
-//                    this.setX(this.fallingTargetPoint - this.getCanvasLength() / 2);//떨어지는 지점으로 위치 이동
                     if (this.fallingCount < 30) {
                         this.fallingCount++;
                     }
@@ -226,6 +226,10 @@ public class BossZombie extends NormalZombie{
         if (this.moveWaitCount < 60) {
             this.moveWaitCount++;
             return this.moveRandNum;
+        }
+        else if (this.moveWaitCount == 60) {
+            this.moveWaitCount = 0;
+            return (int) Math.floor(Math.random() * 10); //0~9 사이 난수 발생
         }
         else {
             this.moveWaitCount = 0;
@@ -485,7 +489,7 @@ public class BossZombie extends NormalZombie{
         //살아있고, 공격중이 아니고, 현재 스테이지에 해당되면 움직임
         if (this.isDead() == false && this.getVel().isAttacking() == false && this.stageNum == currentStageNum) {
             this.getVel().setMoving(true);
-            for (var i = 0; i <= this.getCanvasLength() - 100; i++) { // 위치 정보 갱신
+            for (int i = 0; i <= this.getCanvasLength() - 100; i++) { // 위치 정보 갱신
                 collisonCheckX[this.getX() + 50 + i] = 1;
             }
 
@@ -694,7 +698,9 @@ public class BossZombie extends NormalZombie{
             collisonCheckX[getX() + getCanvasLength() - 48] = 1;
             addX(2);
 
-            setFixedRange(xMax_left+2, xMax_right+2);
+            xMax_left+=2;
+            xMax_right+=2;
+//            setFixedRange(xMax_left+2, xMax_right+2);
         }
 
     }
@@ -706,7 +712,10 @@ public class BossZombie extends NormalZombie{
             collisonCheckX[getX() + getCanvasLength() - 50] = -1;
             collisonCheckX[getX() + getCanvasLength() - 51] = -1;
             subX(2);
-            setFixedRange(xMax_left-2, xMax_right-2);
+
+            xMax_left+=2;
+            xMax_right+=2;
+//            setFixedRange(xMax_left-2, xMax_right-2);
         }
 
     }
