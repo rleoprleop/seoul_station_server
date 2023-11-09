@@ -42,7 +42,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
             UserDTO user = objectMapper.readValue(request.getInputStream(), UserDTO.class);
-            log.debug("1.CustomAuthenticationFilter :: userId:" + user.getUserId() + " userPw:" + user.getUserPassword());
+            log.info("1.CustomAuthenticationFilter :: userId:" + user.getUserId() + " userPw:" + user.getUserPassword());
             System.out.println(user.getUserId()+" "+ user.getUserPassword());
 
             // ID와 패스워드를 기반으로 토큰 발급

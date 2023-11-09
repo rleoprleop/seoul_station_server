@@ -21,5 +21,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new RefreshInterceptor(redisTemplate,jwtTokenProvider))
                 .addPathPatterns("/user/refresh");
     }
-
 }

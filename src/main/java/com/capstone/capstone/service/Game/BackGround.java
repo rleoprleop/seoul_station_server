@@ -19,7 +19,7 @@ public class BackGround {
         bg_length=1960;
         bg_canvasLength=960;
         bg_x=0;
-        bg_count=4;
+        bg_count=3;
         bg_xMax=(1960*3)-1960*(1960/960);
         ratio=1960/960;
         bgMovingRight=false;

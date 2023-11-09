@@ -1,7 +1,6 @@
 package com.capstone.capstone.service.Game;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -15,7 +14,7 @@ public class CrawlingZombie extends NormalZombie{
     private int rangedAttackDelay;
     private int rangedAttackTarget;
 
-    private int rangedWaitCount;
+    private int rangedAttackWaitCount;
     private boolean rangedAttackDone;
 
     private int spittingLoop;
@@ -42,6 +41,9 @@ public class CrawlingZombie extends NormalZombie{
 
         this.rangedAttackDelay = 0;// 원거리 공격이 유효해지는 시간 -> 0.5초
         this.rangedAttackTarget = 0; //목표 지점
+
+        this.rangedAttackWaitCount = 0; // 원거리 공격에서 쓰는 waitCount
+        this.rangedAttackDone = true;
 
         //각 동작의 총 컷 수
         this.spittingLoop = 6;
@@ -124,18 +126,19 @@ public class CrawlingZombie extends NormalZombie{
         this.setAttackDone(false);
         this.checkBigXSmallX(p1, p2);
         if ((this.bigX >= this.rangedAttack_left && this.bigX <= this.getX() + 100) || this.rangedAttackDone == false) { //왼쪽으로 공격 하는 경우
+            this.getVel().setLookingRight(false);
             //원거리 공격
             if ((this.bigX >= this.rangedAttack_left && this.bigX < this.getX_attackLeft()) || this.rangedAttackDone == false) {
                 this.rangedAttackDone = false;
                 this.spitting = true;
-                if (this.getWaitCount() < 120 && this.getWaitCount() != 60) {
-                    this.addWaitCount(1);
+                if (this.rangedAttackWaitCount < 150 && this.rangedAttackWaitCount != 60) {
+                    this.rangedAttackWaitCount++;
                 }
-                else if (this.getWaitCount() == 60) {
+                else if (this.rangedAttackWaitCount == 60) {
                     this.rangedAttackTarget = bigX - 60;// 대상 플레이어 가운데 지점
-                    this.addWaitCount(1);
+                    this.rangedAttackWaitCount++;
                 }
-                else if (this.getWaitCount() == 120) { //원거리 공격 활성화
+                else if (this.rangedAttackWaitCount == 150) { //원거리 공격 활성화
                     if (this.rangedAttackDelay < 30) {
                         this.rangedAttackDelay++;
                         this.checkRangedAttack(p1, p2);
@@ -180,13 +183,13 @@ public class CrawlingZombie extends NormalZombie{
                         this.setAttackDone(true);
                     }
                     else {
-                        if (this.getWaitCount() < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                        if (this.getWaitCount() < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                             this.addWaitCount(1);
                         }
 
-                        else if (this.getWaitCount() == 30) {
+                        else if (this.getWaitCount() == 60) {
                             if (this.getAttackCount() >= 2) {
-                                this.getAttackBox().addOfAttackTimer(6);
+                                this.getAttackBox().addAtkTimer(6);
                             }
                         }
 
@@ -230,14 +233,14 @@ public class CrawlingZombie extends NormalZombie{
             //원거리 공격
             if (this.getX_attackRight() < this.smallX && this.smallX <= this.rangedAttack_right) {
                 this.spitting = true;
-                if (this.getWaitCount() < 120 && this.getWaitCount() != 60) {
-                    this.addWaitCount(1);
+                if (this.rangedAttackWaitCount < 150 && this.getWaitCount() != 60) {
+                    this.rangedAttackWaitCount++;
                 }
-                else if (this.getWaitCount() == 60) {
-                    this.rangedAttackTarget = smallX + 60;// 대상 플레이어 가운데 지점
-                    this.addWaitCount(1);
+                else if (this.rangedAttackWaitCount == 60) {
+                    this.rangedAttackTarget = this.smallX + 60;// 대상 플레이어 가운데 지점
+                    this.rangedAttackWaitCount++;
                 }
-                else if (this.getWaitCount() == 120) { //원거리 공격 활성화
+                else if (this.getWaitCount() == 150) { //원거리 공격 활성화
                     if (this.rangedAttackDelay < 30) {
                         this.rangedAttackDelay++;
                         this.checkRangedAttack(p1, p2);
@@ -282,13 +285,13 @@ public class CrawlingZombie extends NormalZombie{
                         this.setAttackDone(true);
                     }
                     else {
-                        if (this.getWaitCount() < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                        if (this.getWaitCount() < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                             this.addWaitCount(1);
                         }
 
-                        else if (this.getWaitCount() == 30) {
+                        else if (this.getWaitCount() == 60) {
                             if (this.getAttackCount() >= 2) {
-                                this.getAttackBox().addOfAttackTimer(6);
+                                this.getAttackBox().addAtkTimer(6);
                             }
                         }
 
@@ -428,7 +431,7 @@ public class CrawlingZombie extends NormalZombie{
     public void updateAnimation(int currentStageNum) {
         //crawlingZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
-            if (this.getWaitCount() >= 110) {// 투사체 떨어지는 부분. 실질적으로 데미지 입는 시간은 waitCount 120부터
+            if (this.getWaitCount() >= 140) {// 투사체 떨어지는 부분. 실질적으로 데미지 입는 시간은 waitCount 120부터
                 if (this.poisonFallingCount == 10) {
                     this.poisonFallingCut++;
                     this.poisonFallingCount = 0;
@@ -510,4 +513,30 @@ public class CrawlingZombie extends NormalZombie{
             }
         }
     }
+
+    public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 50] = -1;
+            collisonCheckX[getX() + 51] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+            addX(2);
+
+            setFixedRange(xMax_left+2, xMax_right+2);
+        }
+
+    }
+
+    public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 48] = 1;
+            collisonCheckX[getX() + 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+            subX(2);
+            setFixedRange(xMax_left-2, xMax_right-2);
+        }
+
+    }
+
 }

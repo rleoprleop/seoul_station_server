@@ -20,7 +20,7 @@ public class AttackBox {
         height=50;
         atkTimer=0;
     }
-    public void addOfAttackTimer(int i){
+    public void addAtkTimer(int i){
         atkTimer+=i;
     }
 

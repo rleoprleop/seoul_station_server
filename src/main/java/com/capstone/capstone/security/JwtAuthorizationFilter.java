@@ -38,17 +38,23 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain)
             throws IOException, ServletException {
+        log.info("doFilter==========================");
         // 1. Request Header 에서 JWT 토큰 추출
         String header = request.getHeader("Authorization");
         List<String> list = Arrays.asList(
-                "/user/sign-in",
-                "/user/sign-up"
+                "/user/delete-user",
+                "/user/password-change",
+                "/user/refresh",
+                "/wait-service/waitroom/create",
+                "/wait-service/waitroom/code",
+                "/stage/get",
+                "/stage/set"
         );
 
-        System.out.println(request.getRequestURI());
+        log.info("uri : {}",request.getRequestURI());
 
         // 2. 토큰이 필요하지 않은 API URL의 경우 => 로직 처리 없이 다음 필터로 이동
-        if (list.contains(request.getRequestURI())) {
+        if (!list.contains(request.getRequestURI())) {
             System.out.println("1111"+request.getRequestURI());
             chain.doFilter(request, response);
             return;

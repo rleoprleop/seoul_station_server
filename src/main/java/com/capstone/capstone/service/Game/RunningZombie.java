@@ -10,6 +10,8 @@ public class RunningZombie extends NormalZombie{
     private boolean running;
     private boolean grabbing;
 
+    private int grabWaitCount;
+
     private int runningLoop;
     private int deathLoop;
     private int runningCut;
@@ -23,6 +25,7 @@ public class RunningZombie extends NormalZombie{
         this.running = false;
         this.grabbing = false;
 
+        this.grabWaitCount = 0;
 
         //각 동작의 총 컷 수
         this.runningLoop = 6;
@@ -49,6 +52,7 @@ public class RunningZombie extends NormalZombie{
             if ((Math.abs(p2.getX() - p1.getX()) < 50 && p2.getVel().isInteraction() == true) || p1.isDead() == true) { //p2가 풀어준 경우이거나, p1이 죽었을 때
                 this.grabbing = false;
                 //몬스터 공격 정보 초기화
+                this.grabWaitCount=0;
                 this.setWaitCount(0);
                 this.getAttackBox().setAtkTimer(0);
                 this.getVel().setAttacking(false);
@@ -56,6 +60,16 @@ public class RunningZombie extends NormalZombie{
                 this.setAttackRandomNum((int) Math.floor(Math.random() * 10)); // 0~9 정수 난수 발생
 
                 p1.setGrabbed(false);
+
+                if (p1.getVel().isLookingRight() == true) { //플레이어가 왼쪽에서 잡혔을 경우
+                    p1.setX(this.getX() - this.getCanvasLength() - 20);
+                    p1.getAttackBox().setPosition_x(p1.getX() + p1.getCanvasLength() / 2);
+                }
+
+                else if (p1.getVel().isLookingRight() == false) {//오른쪽에서 잡혔을 경우
+                    p1.setX(this.getX() + this.getCanvasLength() + 20);
+                    p1.getAttackBox().setPosition_x(p1.getX() + (p1.getCanvasLength() / 2));
+                }
             }
         }
 
@@ -63,6 +77,7 @@ public class RunningZombie extends NormalZombie{
             if ((Math.abs(p2.getX() - p1.getX()) < 50 && p1.getVel().isInteraction() == true) || p2.isDead() == true) { //p1이 풀어준 경우이거나, p2가 죽었을 때
                 this.grabbing = false;
                 //몬스터 공격 정보 초기화
+                this.grabWaitCount=0;
                 this.setWaitCount(0);
                 this.getAttackBox().setAtkTimer(0);
                 this.getVel().setAttacking(false);
@@ -70,6 +85,15 @@ public class RunningZombie extends NormalZombie{
                 this.setAttackRandomNum((int) Math.floor(Math.random() * 10)); // 0~9 정수 난수 발생
 
                 p2.setGrabbed(false);
+                if (p2.getVel().isLookingRight()) { //플레이어가 왼쪽에서 잡혔을 경우
+                    p2.setX(this.getX() - this.getCanvasLength() - 20);
+                    p2.getAttackBox().setPosition_x(p2.getX() + p2.getCanvasLength() / 2);
+                }
+
+                else if (p2.getVel().isLookingRight() == false) {//오른쪽에서 잡혔을 경우
+                    p2.setX(this.getX() + this.getCanvasLength() + 20);
+                    p2.getAttackBox().setPosition_x(p2.getX() + p2.getCanvasLength() / 2);
+                }
             }
         }
     }
@@ -79,11 +103,11 @@ public class RunningZombie extends NormalZombie{
 
         if (this.grabbing == true) {
             this.checkGrabbingCancelled(p1, p2);
-            if (this.getWaitCount() < 300) {
-                this.addWaitCount(1);
+            if (this.grabWaitCount < 300) {
+                this.grabWaitCount++;
             }
-            else if (this.getWaitCount() == 300) { //2초가 지나면 데미지를 입힘
-                this.setWaitCount(0);
+            else if (this.grabWaitCount == 300) { //2초가 지나면 데미지를 입힘
+                this.grabWaitCount=0;
                 if (p1.isGrabbed() == true) {
                     p1.subHealthCount(1);
                     p1.checkIsDead();
@@ -117,13 +141,13 @@ public class RunningZombie extends NormalZombie{
                         this.setAttackDone(true);
                     }
                     else {
-                        if (this.getWaitCount() < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                        if (this.getWaitCount() < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                             this.addWaitCount(1);
                         }
 
-                        else if (this.getWaitCount() == 30) {
+                        else if (this.getWaitCount() == 60) {
                             if (this.getAttackCount() >= 3) {
-                                this.getAttackBox().addOfAttackTimer(6);
+                                this.getAttackBox().addAtkTimer(6);
                             }
                         }
 
@@ -182,13 +206,13 @@ public class RunningZombie extends NormalZombie{
                         this.setAttackDone(true);
                     }
                     else {
-                        if (this.getWaitCount() < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                        if (this.getWaitCount() < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                             this.addWaitCount(1);
                         }
 
-                        else if (this.getWaitCount() == 30) {
+                        else if (this.getWaitCount() == 60) {
                             if (this.getAttackCount() >= 3) {
-                                this.getAttackBox().addOfAttackTimer(6);
+                                this.getAttackBox().addAtkTimer(6);
                             }
                         }
 
@@ -239,7 +263,7 @@ public class RunningZombie extends NormalZombie{
 
                     else if (this.getWaitCount() == 30) {
                         if (this.getAttackCount() >= 3) {
-                            this.getAttackBox().addOfAttackTimer(6);
+                            this.getAttackBox().addAtkTimer(6);
                         }
                     }
 
@@ -286,7 +310,7 @@ public class RunningZombie extends NormalZombie{
 
                     else if (this.getWaitCount() == 30) {
                         if (this.getAttackCount() >= 3) {
-                            this.getAttackBox().addOfAttackTimer(6);
+                            this.getAttackBox().addAtkTimer(6);
                         }
                     }
 
@@ -475,6 +499,31 @@ public class RunningZombie extends NormalZombie{
         }
     }
 
+    public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 50] = -1;
+            collisonCheckX[getX() + 51] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+            addX(2);
+
+            setFixedRange(xMax_left+2, xMax_right+2);
+        }
+
+    }
+
+    public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 48] = 1;
+            collisonCheckX[getX() + 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+            subX(2);
+            setFixedRange(xMax_left-2, xMax_right-2);
+        }
+
+    }
+
     public void updateAnimation(int currentStageNum) {
         //RunningZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
@@ -488,10 +537,10 @@ public class RunningZombie extends NormalZombie{
                 }
                 //텀이 지나고 다시 공격하는 경우
                 else if (this.getVel().isAttacking() == true && this.getWaitCount() == 30) {
-                    if (this.getAttackFrame() < 10) {
+                    if (this.getAttackFrame() < 8) {
                         this.addAttackFrame(1);
                     }
-                    else if (this.getAttackFrame() == 10) {
+                    else if (this.getAttackFrame() == 8) {
                         this.setAttackFrame(0);
                         if (this.getAttackCount() < this.getAttackLoop() - 1) {
                             this.addAttackCount(1);
