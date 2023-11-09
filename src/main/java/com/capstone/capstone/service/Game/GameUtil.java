@@ -1204,8 +1204,10 @@ public class GameUtil {
                     p2.setX(300);
                     bg.setBg_x(0);
 
-                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
-                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
+                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+//                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
+//                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
 
                     p1.getVel().setLookingRight(true);
                     p2.getVel().setLookingRight(true);
@@ -1215,8 +1217,10 @@ public class GameUtil {
                     p2.setX(1800);
                     bg.setBg_x(bg.getBg_xMax());
 
-                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
-                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
+                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+//                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
+//                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
 
                     p1.getVel().setLookingRight(false);
                     p2.getVel().setLookingRight(false);
@@ -1232,8 +1236,10 @@ public class GameUtil {
                     p2.setX(300);
                     bg.setBg_x(0);
 
-                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
-                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
+                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+//                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
+//                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
 
                     p1.getVel().setLookingRight(true);
                     p2.getVel().setLookingRight(true);
@@ -1242,9 +1248,10 @@ public class GameUtil {
                     p1.setX(1500);
                     p2.setX(1800);
                     bg.setBg_x(bg.getBg_xMax());
-
-                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
-                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
+                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+//                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
+//                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
 
                     p1.getVel().setLookingRight(false);
                     p2.getVel().setLookingRight(false);
