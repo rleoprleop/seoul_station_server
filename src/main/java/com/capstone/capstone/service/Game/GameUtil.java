@@ -1205,7 +1205,7 @@ public class GameUtil {
                     bg.setBg_x(0);
 
                     p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
@@ -1218,7 +1218,7 @@ public class GameUtil {
                     bg.setBg_x(bg.getBg_xMax());
 
                     p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
@@ -1237,7 +1237,7 @@ public class GameUtil {
                     bg.setBg_x(0);
 
                     p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
 
@@ -1250,7 +1250,7 @@ public class GameUtil {
                     p2.setX(1800);
                     bg.setBg_x(bg.getBg_xMax());
                     p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p1.getX(),p2.getCanvasLength());
+                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
