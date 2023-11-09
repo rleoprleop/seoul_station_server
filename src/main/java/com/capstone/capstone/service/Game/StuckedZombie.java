@@ -24,6 +24,7 @@ public class StuckedZombie {
     private int deathCount;
     private int deathCut;
     private int healthCount;
+    private boolean hitCheck;
     public StuckedZombie(int x, int y, int width, int height, int canvasLength) {
         this.x = x;
         this.y = y;
@@ -48,6 +49,7 @@ public class StuckedZombie {
         this.deathCut = 0;
 
         this.healthCount = 1;
+        this.hitCheck = false;
     }
 
     public void attack(int[] collisonCheckX, Player p1, Player p2) {
@@ -75,7 +77,7 @@ public class StuckedZombie {
             }
         }
         else if (this.stunned == true && this.dead == false) {
-            this.stun(p1, collisonCheckX);
+            this.stun();
         }
         else if (this.dead == true) {
             for (var i = 0; i <= this.canvasLength - 100; i++) {
@@ -91,8 +93,9 @@ public class StuckedZombie {
         }
     }
 
-    public void stun(Player p1, int[] collisonCheckX) {
-        this.checkAttacked(p1.getAttackTimer(), collisonCheckX);
+
+    public void stun() {
+//        this.checkAttacked(p1.getAttackTimer(), collisonCheckX);
         if (this.stunCount < 30 && this.stunCut < 2) {
             this.stunCount++;
         }
@@ -115,10 +118,33 @@ public class StuckedZombie {
     public void checkAttacked(int atkTimer_p1, int[] collisonCheckX) {//공격이 해당 물체에 가해졌는지 확인
         if ((collisonCheckX[atkTimer_p1] == 1) && (this.x <= atkTimer_p1 && atkTimer_p1 <= this.x + this.canvasLength) && this.dead == false) {
             this.healthCount--;
+            this.hitCheck=true;
             if (this.healthCount == 0) {
                 //console.log('nz1 dead');
                 this.dead = true;
             }
         }
+    }
+
+    public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 50] = -1;
+            collisonCheckX[getX() + 51] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+            x+=2;
+        }
+
+    }
+
+    public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 48] = 1;
+            collisonCheckX[getX() + 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+            x-=2;
+        }
+
     }
 }

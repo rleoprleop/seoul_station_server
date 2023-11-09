@@ -25,6 +25,7 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
+        log.info("Fail");
 
         HashMap<String, Object> resultMap = new HashMap<>();
 

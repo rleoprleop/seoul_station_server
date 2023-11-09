@@ -3,6 +3,8 @@ package com.capstone.capstone.service;
 import com.capstone.capstone.VO.PlayerVO;
 import com.capstone.capstone.VO.StageJoinBackgroundVO;
 import com.capstone.capstone.VO.StageJoinMobVO;
+import com.capstone.capstone.dto.CommonCode;
+import com.capstone.capstone.dto.CommonCodeDTO;
 import com.capstone.capstone.dto.StageSetRequestDTO;
 import com.capstone.capstone.mapper.PlayerMapper;
 import com.capstone.capstone.mapper.StageMapper;
@@ -27,6 +29,8 @@ public class StageService {
         Map<String,Object> result = new HashMap<>();
         Optional<PlayerVO> playerVOOptional = playerMapper.getPlayerById(id);
         PlayerVO playerVO = playerVOOptional.get();
+        CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_STAGE_GET);
+        result.put("code",commonCodeDTO);
         result.put("player",setPlayerCode(playerVO));
 
 //        List<StageJoinBackgroundVO> bg = stageMapper.getBackgroundByStageId(stageId);
@@ -50,6 +54,8 @@ public class StageService {
 
         Optional<PlayerVO> playerVOOptional = playerMapper.getPlayerById(dto.getId());
         PlayerVO playerVO = playerVOOptional.get();
+        CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.SUCCESS_STAGE_SET);
+        result.put("code",commonCodeDTO);
         result.put("player",setPlayerCode(playerVO));
         return result;
     }

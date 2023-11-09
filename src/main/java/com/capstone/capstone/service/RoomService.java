@@ -1,5 +1,7 @@
 package com.capstone.capstone.service;
 
+import com.capstone.capstone.dto.CommonCode;
+import com.capstone.capstone.dto.CommonCodeDTO;
 import com.capstone.capstone.dto.JoinWaitRoomRequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +56,13 @@ public class RoomService {
         }
         result.put("waitRoomId",roomId);
         if(roomUser.get(roomId).get(0).equals(joinWaitRoomRequestDTO.getUserId())){
+            CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.CONNECT_MULTI);
+            result.put("code",commonCodeDTO);
             return result;
         }
         roomUser.get(roomId).add(joinWaitRoomRequestDTO.getUserId());
+        CommonCodeDTO commonCodeDTO = CommonCodeDTO.toCommonCodeDTO(CommonCode.CONNECT_MULTI);
+        result.put("code",commonCodeDTO);
         return result;//waitroomid
     }
 

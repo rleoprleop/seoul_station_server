@@ -33,7 +33,8 @@ public class NormalZombie extends Creature{
     private int attackRandomNum;
     private boolean attackDone;
     private int deathCut;
-
+    private boolean hitCheck;
+    private int sfxIndex;
     public NormalZombie(int x, int y, int widgh, int height, int canvasLength,int healthMax){
         super(x,y,widgh,height,canvasLength,healthMax);
         move_range = 100; // 몹이 무작위로 움직이는 최대 범위
@@ -61,6 +62,10 @@ public class NormalZombie extends Creature{
         stageNum = 1;
         attackRandomNum = 0;
         attackDone = true;
+
+        hitCheck = false;
+
+        sfxIndex = 0;
     }
     public void setFixedRange(int xMax_left, int xMax_right) {
         this.xMax_left = xMax_left;
@@ -101,7 +106,7 @@ public class NormalZombie extends Creature{
 
     public void zombieAttack(Player p1, Player p2, int[] collisonCheckX) {
         getVel().setMoving(false);
-        if(attackRandomNum>=6){
+        if(attackRandomNum>=2){
             if (getVel().isLookingRight()) { // 오른쪽 보고있는 경우
                 if (getAttackBox().getAtkTimer() <= getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 100, 프레임당 2. 50프레임 소모
                     attackDone=false;
@@ -122,13 +127,13 @@ public class NormalZombie extends Creature{
                         attackDone=true;
                     }
                     else {
-                        if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                        if (this.waitCount < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                             this.waitCount++;
                         }
 
-                        else if (this.waitCount == 30) {
+                        else if (this.waitCount == 60) {
                             if(getAttackCount()>=2){
-                                getAttackBox().addOfAttackTimer(6);
+                                getAttackBox().addAtkTimer(6);
                             }
                         }
 
@@ -187,13 +192,13 @@ public class NormalZombie extends Creature{
                         attackDone=true;
                     }
                     else {
-                        if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                        if (this.waitCount < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                             this.waitCount++;
                         }
 
-                        else if (this.waitCount == 30) {
+                        else if (this.waitCount == 60) {
                             if(getAttackCount()>=2){
-                                getAttackBox().addOfAttackTimer(6);
+                                getAttackBox().addAtkTimer(6);
                             }
                         }
 
@@ -235,13 +240,13 @@ public class NormalZombie extends Creature{
             if (getVel().isLookingRight()) { // 오른쪽 보고있는 경우
                 if (getAttackBox().getAtkTimer() <= getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 100, 프레임당 2. 50프레임 소모
                     attackDone=false;
-                    if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                    if (this.waitCount < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                         this.waitCount++;
                     }
 
-                    else if (this.waitCount == 30) {
+                    else if (this.waitCount == 60) {
                         if(getAttackCount()>=2){
-                            getAttackBox().addOfAttackTimer(6);
+                            getAttackBox().addAtkTimer(6);
                         }
                     }
 
@@ -284,13 +289,13 @@ public class NormalZombie extends Creature{
             else { //왼쪽을 보고 있는 경우
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //왼쪽 공격 진행중
                     attackDone=false;
-                    if (this.waitCount < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                    if (this.waitCount < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                         this.waitCount++;
                     }
 
-                    else if (this.waitCount == 30) {
+                    else if (this.waitCount == 60) {
                         if(getAttackCount()>=2){
-                            getAttackBox().addOfAttackTimer(6);
+                            getAttackBox().addAtkTimer(6);
                         }
                     }
 
@@ -524,6 +529,31 @@ public class NormalZombie extends Creature{
                 this.deathCount++;
             }
         }
+    }
+
+    public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 50] = -1;
+            collisonCheckX[getX() + 51] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+            addX(2);
+
+            setFixedRange(xMax_left+2, xMax_right+2);
+        }
+
+    }
+
+    public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
+        if (objStageNum == currentStageNum) {
+            collisonCheckX[getX() + 48] = 1;
+            collisonCheckX[getX() + 49] = 1;
+            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+            subX(2);
+            setFixedRange(xMax_left-2, xMax_right-2);
+        }
+
     }
 
     public void addStunAnimaitonCount(int i) {

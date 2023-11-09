@@ -1,5 +1,6 @@
 package com.capstone.capstone.websocket;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -11,6 +12,7 @@ import org.springframework.web.socket.messaging.StompSubProtocolErrorHandler;
 import java.nio.charset.StandardCharsets;
 
 @Component
+@Slf4j
 public class ChatErrorHandler extends StompSubProtocolErrorHandler {
 
     public ChatErrorHandler() {
@@ -20,6 +22,7 @@ public class ChatErrorHandler extends StompSubProtocolErrorHandler {
     @Override
     public Message<byte[]> handleClientMessageProcessingError(Message<byte[]>clientMessage, Throwable ex)
     {
+        log.info("websocket error {}", clientMessage);
         ex.printStackTrace();
         Throwable exception = new MessageDeliveryException("error!!");
         if (exception instanceof MessageDeliveryException)

@@ -12,10 +12,12 @@ public class Zombie {
     private Map<Integer,RunningZombie> runningZombieMap;
     private Map<Integer,CrawlingZombie> crawlingZombieMap;
     private Map<Integer,StuckedZombie> stuckedZombieMap;
-    public Zombie(Map<Integer,NormalZombie> nz, Map<Integer,RunningZombie> rz, Map<Integer,CrawlingZombie> cz, Map<Integer,StuckedZombie> sz){
+    private Map<Integer,BossZombie> bossZombieMap;
+    public Zombie(Map<Integer,NormalZombie> nz, Map<Integer,RunningZombie> rz, Map<Integer,CrawlingZombie> cz, Map<Integer,StuckedZombie> sz, Map<Integer,BossZombie> bz){
         normalZombieMap=nz;
         runningZombieMap=rz;
         crawlingZombieMap=cz;
         stuckedZombieMap=sz;
+        bossZombieMap=bz;
     }
 }
