@@ -54,7 +54,7 @@ public class StuckedZombie {
 
     public void attack(int[] collisonCheckX, Player p1, Player p2) {
 
-        for (var i = 0; i <= this.canvasLength - 100; i++) {
+        for (int i = 0; i <= this.canvasLength - 100; i++) {
             collisonCheckX[this.x + 50 + i] = 1;
         }
         if (this.stunned == false && this.dead == false) {
@@ -80,7 +80,7 @@ public class StuckedZombie {
             this.stun();
         }
         else if (this.dead == true) {
-            for (var i = 0; i <= this.canvasLength - 100; i++) {
+            for (int i = 0; i <= this.canvasLength - 100; i++) {
                 collisonCheckX[this.x + 50 + i] = -1;
             }
             if (this.deathCount < 20 && this.deathCut < 4) {
@@ -128,10 +128,10 @@ public class StuckedZombie {
 
     public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
         if (objStageNum == currentStageNum) {
-            collisonCheckX[getX() + 50] = -1;
-            collisonCheckX[getX() + 51] = -1;
-            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
-            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+            collisonCheckX[x + 50] = -1;
+            collisonCheckX[x + 51] = -1;
+            collisonCheckX[x + canvasLength - 49] = 1;
+            collisonCheckX[x + canvasLength - 48] = 1;
             x+=2;
         }
 
@@ -139,10 +139,10 @@ public class StuckedZombie {
 
     public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
         if (objStageNum == currentStageNum) {
-            collisonCheckX[getX() + 48] = 1;
-            collisonCheckX[getX() + 49] = 1;
-            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
-            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+            collisonCheckX[x + 48] = 1;
+            collisonCheckX[x + 49] = 1;
+            collisonCheckX[x + canvasLength - 50] = -1;
+            collisonCheckX[x + canvasLength - 51] = -1;
             x-=2;
         }
 

@@ -127,6 +127,7 @@ public class RunningZombie extends NormalZombie{
                     //공격 상자 늘리기 전에 플레이어들의 방어 확인
                     if (p1.getVel().isBlocking() && !p1.getVel().isLookingRight() && (this.getAttackBox().getPosition_x() + this.getAttackBox().getAtkTimer() + 6) >= p1.getBlockBox().getX_left()) {
                         // 플레이어1의 왼쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -135,6 +136,7 @@ public class RunningZombie extends NormalZombie{
 
                     if (p2.getVel().isBlocking() && !p2.getVel().isLookingRight() && (this.getAttackBox().getPosition_x() + this.getAttackBox().getAtkTimer() + 6) >= p2.getBlockBox().getX_left()) {
                         //플레이어2의 왼쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -193,6 +195,7 @@ public class RunningZombie extends NormalZombie{
                     //공격 상자 늘리기 전에 플레이어의 방어 확인
                     if (p1.getVel().isBlocking() == true && p1.getVel().isLookingRight() == true && (this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() - 6) <= p1.getBlockBox().getX_right()) {
                         // 플레이어1의 오른쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -200,6 +203,7 @@ public class RunningZombie extends NormalZombie{
                     }
                     if (p2.getVel().isBlocking() == true && p2.getVel().isLookingRight() == true && (this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() - 6) <= p2.getBlockBox().getX_right()) {
                         // 플레이어2의 오른쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -257,11 +261,11 @@ public class RunningZombie extends NormalZombie{
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 120, 40프레임 소모
                     this.setAttackDone(false);
                     //방어 확인 X
-                    if (this.getWaitCount() < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                    if (this.getWaitCount() < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                         this.addWaitCount(1);
                     }
 
-                    else if (this.getWaitCount() == 30) {
+                    else if (this.getWaitCount() == 60) {
                         if (this.getAttackCount() >= 3) {
                             this.getAttackBox().addAtkTimer(6);
                         }
@@ -304,11 +308,11 @@ public class RunningZombie extends NormalZombie{
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //왼쪽 공격 진행중
                     this.setAttackDone(false);
                     //방어 확인 X
-                    if (this.getWaitCount() < 30) { //몬스터가 공격 하기 전 잠깐 주는 텀
+                    if (this.getWaitCount() < 60) { //몬스터가 공격 하기 전 잠깐 주는 텀
                         this.addWaitCount(1);
                     }
 
-                    else if (this.getWaitCount() == 30) {
+                    else if (this.getWaitCount() == 60) {
                         if (this.getAttackCount() >= 3) {
                             this.getAttackBox().addAtkTimer(6);
                         }
@@ -368,7 +372,7 @@ public class RunningZombie extends NormalZombie{
         }
         // 몹이 살아있고, 공격하고 있지 않고, 스턴에 걸리지 않은 상태이고, 현재 스테이지에 해당한다면 움직임
         if (this.isDead() == false && this.getVel().isAttacking() == false && this.isStunned() == false && this.stageNum == currentStageNum) {
-            for (var i = 0; i <= this.getCanvasLength() - 100; i++) {
+            for (int i = 0; i <= this.getCanvasLength() - 100; i++) {
                 collisonCheckX[this.getX() + 50 + i] = 1;
             }
 
@@ -492,7 +496,7 @@ public class RunningZombie extends NormalZombie{
             }
         }
 
-        else if (this.isDead() == true || (this.stageNum != currentStageNum)) { //몹이 죽었거나, 현재 스테이지에 해당하지 않는 경우
+        else if (this.isDead() == true) { //몹이 죽었거나, 현재 스테이지에 해당하지 않는 경우
             for (int i = 0; i <= this.getAttackBox().getWidth(); i++) {
                 collisonCheckX[this.getX() + i] = -1;
             }
@@ -507,7 +511,10 @@ public class RunningZombie extends NormalZombie{
             collisonCheckX[getX() + getCanvasLength() - 48] = 1;
             addX(2);
 
-            setFixedRange(xMax_left+2, xMax_right+2);
+            xMax_left+=2;
+            xMax_right+=2;
+
+//            setFixedRange(xMax_left+2, xMax_right+2);
         }
 
     }
@@ -519,15 +526,21 @@ public class RunningZombie extends NormalZombie{
             collisonCheckX[getX() + getCanvasLength() - 50] = -1;
             collisonCheckX[getX() + getCanvasLength() - 51] = -1;
             subX(2);
-            setFixedRange(xMax_left-2, xMax_right-2);
+
+            xMax_left+=2;
+            xMax_right+=2;
+//            setFixedRange(xMax_left-2, xMax_right-2);
         }
 
     }
 
     public void updateAnimation(int currentStageNum) {
+        this.setHitCheck(false);
         //RunningZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
             if (this.getVel().isMoving() == false) {
+                this.setAttackFrame(0);
+                this.setAttackCount(0);
                 //플레이어가 해당 몬스터의 공격을 막았을 경우
                 if (this.isStunned() == true) {
                     if (this.getStunCount() % 40 == 39) {
@@ -536,7 +549,7 @@ public class RunningZombie extends NormalZombie{
                     }
                 }
                 //텀이 지나고 다시 공격하는 경우
-                else if (this.getVel().isAttacking() == true && this.getWaitCount() == 30) {
+                else if (this.getVel().isAttacking() == true && this.getWaitCount() == 60) {
                     if (this.getAttackFrame() < 8) {
                         this.addAttackFrame(1);
                     }

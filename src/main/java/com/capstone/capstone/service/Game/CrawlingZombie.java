@@ -170,6 +170,7 @@ public class CrawlingZombie extends NormalZombie{
                     //공격 상자 늘리기 전에 플레이어의 방어 확인
                     if (p1.getVel().isBlocking() == true && p1.getVel().isLookingRight() == true && (this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() - 6) <= p1.getBlockBox().getX_right()) {
                         // 플레이어1의 오른쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -177,6 +178,7 @@ public class CrawlingZombie extends NormalZombie{
                     }
                     if (p2.getVel().isBlocking() == true && p2.getVel().isLookingRight() == true && (this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() - 6) <= p2.getBlockBox().getX_right()) {
                         // 플레이어2의 오른쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -271,6 +273,7 @@ public class CrawlingZombie extends NormalZombie{
                     //공격 상자 늘리기 전에 플레이어들의 방어 확인
                     if (p1.getVel().isBlocking() == true && p1.getVel().isLookingRight() == false && (this.getAttackBox().getPosition_x() + this.getAttackBox().getAtkTimer() + 6) >= p1.getBlockBox().getX_left()) {
                         // 플레이어1의 왼쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -279,6 +282,7 @@ public class CrawlingZombie extends NormalZombie{
 
                     if (p2.getVel().isBlocking() == true && p2.getVel().isLookingRight() == false && (this.getAttackBox().getPosition_x() + this.getAttackBox().getAtkTimer() + 6) >= p2.getBlockBox().getX_left()) {
                         //플레이어2의 왼쪽 방어가 먼저 활성화 되었을 때 -> 공격 막힘
+                        this.setWaitCount(0);
                         this.setStunned(true);
                         this.getVel().setAttacking(false);
                         this.getAttackBox().setAtkTimer(0);
@@ -422,7 +426,7 @@ public class CrawlingZombie extends NormalZombie{
                 }
             }
         }
-        else if (this.isDead() == true || this.stageNum != currentStageNum) { // 죽었거나 해당 스테이지가 아닐때
+        else if (this.isDead() == true) { // 죽었거나 해당 스테이지가 아닐때
             for (int i = 0; i <= this.getAttackBox().getWidth(); i++) {
                 collisonCheckX[this.getX() + i] = -1;
             }
@@ -431,7 +435,7 @@ public class CrawlingZombie extends NormalZombie{
     public void updateAnimation(int currentStageNum) {
         //crawlingZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
-            if (this.getWaitCount() >= 140) {// 투사체 떨어지는 부분. 실질적으로 데미지 입는 시간은 waitCount 120부터
+            if (this.rangedAttackWaitCount >= 140) {// 투사체 떨어지는 부분. 실질적으로 데미지 입는 시간은 waitCount 120부터
                 if (this.poisonFallingCount == 10) {
                     this.poisonFallingCut++;
                     this.poisonFallingCount = 0;
@@ -453,7 +457,7 @@ public class CrawlingZombie extends NormalZombie{
                 }
                 //텀이 지나고 다시 공격하는 경우
                 else if (this.spitting == true) { // 원거리 공격
-                    if (this.getWaitCount() >= 60 && this.getWaitCount() <= 90) {
+                    if (this.rangedAttackWaitCount >= 60 && this.rangedAttackWaitCount <= 90) {
                         if (this.spittingCount == 10) {
                             this.spittingCount = 0;
                             this.spittingCut++;
@@ -522,7 +526,9 @@ public class CrawlingZombie extends NormalZombie{
             collisonCheckX[getX() + getCanvasLength() - 48] = 1;
             addX(2);
 
-            setFixedRange(xMax_left+2, xMax_right+2);
+            xMax_left+=2;
+            xMax_right+=2;
+//            setFixedRange(xMax_left+2, xMax_right+2);
         }
 
     }
@@ -534,7 +540,10 @@ public class CrawlingZombie extends NormalZombie{
             collisonCheckX[getX() + getCanvasLength() - 50] = -1;
             collisonCheckX[getX() + getCanvasLength() - 51] = -1;
             subX(2);
-            setFixedRange(xMax_left-2, xMax_right-2);
+
+            xMax_left+=2;
+            xMax_right+=2;
+//            setFixedRange(xMax_left-2, xMax_right-2);
         }
 
     }
