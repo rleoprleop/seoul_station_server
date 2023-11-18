@@ -238,6 +238,10 @@ public class GameUtil {
         player.getBlockBox().setY(player.getY() + 60);
     }
 
+    public void updateAttackBox(Player player){
+        player.setPositionX(player.getX(), player.getCanvasLength());
+    }
+
     public void gameLoop(Room room, String userId1, String userId2) {
         if (room==null) {
             return;
@@ -322,6 +326,8 @@ public class GameUtil {
 
         updateBlockBox(p1);
         updateBlockBox(p2);
+        updateAttackBox(p1);
+        updateAttackBox(p2);
 
 //        nz.get(1).move(bigX, smallX, collisonCheckX, currentStageNum);
 
@@ -342,7 +348,7 @@ public class GameUtil {
                 z.getNormalZombieMap().get(i).zombieAttack(p1, p2,collisonCheckX);
             }
 
-            else if (z.getNormalZombieMap().get(i).isAttackDone() == true && z.getNormalZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) {
+            else if ((z.getNormalZombieMap().get(i).isAttackDone() == true && z.getNormalZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) || z.getNormalZombieMap().get(i).isDead()) {
                 z.getNormalZombieMap().get(i).move(bigX, smallX, collisonCheckX, room.getCurrentStageNum());
             }
         }
@@ -354,8 +360,8 @@ public class GameUtil {
                 z.getCrawlingZombieMap().get(i).zombieAttack(p1, p2,collisonCheckX);
             }
 
-            else if (z.getCrawlingZombieMap().get(i).isAttackDone() == true && z.getCrawlingZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) {
-                z.getCrawlingZombieMap().get(i).move(bigX, smallX, collisonCheckX, room.getCurrentStageNum());
+            else if ((z.getCrawlingZombieMap().get(i).isAttackDone() == true && z.getCrawlingZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) || z.getCrawlingZombieMap().get(i).isDead()) {
+                z.getCrawlingZombieMap().get(i).move(bigX, smallX, collisonCheckX, room.getCurrentStageNum());//공격모션 중 죽으면 dead처리 안됨.
             }
         }
 
@@ -366,7 +372,7 @@ public class GameUtil {
                 z.getRunningZombieMap().get(i).zombieAttack(p1, p2,collisonCheckX);
             }
 
-            else if (z.getRunningZombieMap().get(i).isAttackDone() == true && z.getRunningZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) {
+            else if ((z.getRunningZombieMap().get(i).isAttackDone() == true && z.getRunningZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) || z.getRunningZombieMap().get(i).isDead()) {
                 z.getRunningZombieMap().get(i).move(bigX, smallX, collisonCheckX, room.getCurrentStageNum());
             }
         }
@@ -376,7 +382,7 @@ public class GameUtil {
             z.getBossZombieMap().get(0).zombieAttack(p1, p2,collisonCheckX);
         }
 
-        else if (z.getBossZombieMap().get(0).isAttackDone() == true && z.getBossZombieMap().get(0).getStageNum() == room.getCurrentStageNum()) {
+        else if ((z.getBossZombieMap().get(0).isAttackDone() == true && z.getBossZombieMap().get(0).getStageNum() == room.getCurrentStageNum()) || z.getBossZombieMap().get(0).isDead()) {
             z.getBossZombieMap().get(0).move(bigX, smallX, collisonCheckX, room.getCurrentStageNum());
         }
 
@@ -539,206 +545,219 @@ public class GameUtil {
         //플레이어 1,2 가 맵 이동을 위해 같은 방향으로 움직일때
 
         //둘 다 왼쪽으로 움직일 때
-        if ((p1.getVel().isMovingLeft() && collisonCheckX[p1.getX() + 38] != 1) && (!p1.getVel().isAttacking() && !p1.getVel().isBlocking() && !p1.isDamaged())) {
-            if ((p2.getVel().isMovingLeft() && collisonCheckX[p2.getX() + 38] != 1) && (!p2.getVel().isAttacking() && !p2.getVel().isBlocking() && !p2.isDamaged())) {
-                if ((bigX <= 800) && bg.getBg_x() > 0) { //배경화면 오른쪽으로 이동
-                    bg.setBgMovingRight(true);
-                    bg.subBgX(bg.getRatio() * 2);
-
-                    // 플레이어 이외의 물체나 몬스터들
-                    z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
-                    for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                    }
-
-                    for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                    }
-
-                    for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                    }
-                    z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    //플레이어 애니메이션 변수
-                    // 애니메이션 변수
-                    if (p1.getFrameCount() < p1.getRefreshRate()) {
-                        p1.addFrameCount(1);
-                    }
-
-                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
-                        p1.setFrameCount(0);
-                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
-                            p1.setWalkingCount(0);
-                        }
-                        else {
-                            p1.addWalkingCount(1);
-                        }
-                    }
-
-                    if (p2.getFrameCount() < p2.getRefreshRate()) {
-                        p2.addFrameCount(1);
-                    }
-
-                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
-                        p2.setFrameCount(0);
-                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
-                            p2.setWalkingCount(0);
-                        }
-                        else {
-                            p2.addWalkingCount(1);
-                        }
-                    }
-                }
-                else if (p1.getX() > 0 && p2.getX() > 0){ // 그냥 각자 움직이는 경우
-                    collisonCheckX[p1.getX() + 38] = 0;
-                    collisonCheckX[p1.getX() + 39] = 0;
-                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 40] = -1;
-                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 41] = -1;
-                    p1.subX(2);
-                    p1.getAttackBox().subPosition_x(2);
-
-                    // 애니메이션 변수
-                    if (p1.getFrameCount() < p1.getRefreshRate()) {
-                        p1.addFrameCount(1);
-                    }
-
-                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
-                        p1.setFrameCount(0);
-                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
-                            p1.setWalkingCount(0);
-                        }
-                        else {
-                            p1.addWalkingCount(1);
-                        }
-                    }
-
-                    collisonCheckX[p2.getX() + 38] = 0;
-                    collisonCheckX[p2.getX() + 39] = 0;
-                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 40] = -1;
-                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 41] = -1;
-                    p2.subX(2);
-                    p2.getAttackBox().subPosition_x(2);
-
-                    // 애니메이션 변수
-                    if (p2.getFrameCount() < p2.getRefreshRate()) {
-                        p2.addFrameCount(1);
-                    }
-
-                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
-                        p2.setFrameCount(0);
-                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
-                            p2.setWalkingCount(0);
-                        }
-                        else {
-                            p2.addWalkingCount(1);
-                        }
-                    }
-
-                }
-            }
-        }
+//        if (((p1.getVel().isMovingLeft() && collisonCheckX[p1.getX() + 38] != 1) && (!p1.getVel().isAttacking() && !p1.getVel().isBlocking() && !p1.isDamaged()))||((p2.getVel().isMovingLeft() && collisonCheckX[p2.getX() + 38] != 1) && (!p2.getVel().isAttacking() && !p2.getVel().isBlocking() && !p2.isDamaged()))) {
+//            if (true) {
+//                if ((bigX <= 800) && bg.getBg_x() > 0) { //배경화면 오른쪽으로 이동
+//                    bg.setBgMovingRight(true);
+//                    bg.subBgX(bg.getRatio() * 2);
+//
+//
+//                    // 플레이어 이외의 물체나 몬스터들
+//                    if(!p1.getVel().isMovingLeft()){
+//                        p1.moveObjectRight(collisonCheckX);
+//                    }
+//                    if(!p2.getVel().isMovingLeft()){
+//                        p2.moveObjectRight(collisonCheckX);
+//                    }
+//                    z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
+//                    for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
+//                        z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+//                    }
+//
+//                    for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
+//                        z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+//                    }
+//
+//                    for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
+//                        z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+//                    }
+//                    z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+//                    //플레이어 애니메이션 변수
+//                    // 애니메이션 변수
+//                    if (p1.getFrameCount() < p1.getRefreshRate()) {
+//                        p1.addFrameCount(1);
+//                    }
+//
+//                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
+//                        p1.setFrameCount(0);
+//                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
+//                            p1.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p1.addWalkingCount(1);
+//                        }
+//                    }
+//
+//                    if (p2.getFrameCount() < p2.getRefreshRate()) {
+//                        p2.addFrameCount(1);
+//                    }
+//
+//                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
+//                        p2.setFrameCount(0);
+//                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
+//                            p2.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p2.addWalkingCount(1);
+//                        }
+//                    }
+//                }
+//                else if (p1.getX() > 0 && p2.getX() > 0){ // 그냥 각자 움직이는 경우
+//                    collisonCheckX[p1.getX() + 38] = 0;
+//                    collisonCheckX[p1.getX() + 39] = 0;
+//                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 40] = -1;
+//                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 41] = -1;
+//                    p1.subX(2);
+//                    p1.getAttackBox().subPosition_x(2);
+//
+//                    // 애니메이션 변수
+//                    if (p1.getFrameCount() < p1.getRefreshRate()) {
+//                        p1.addFrameCount(1);
+//                    }
+//
+//                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
+//                        p1.setFrameCount(0);
+//                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
+//                            p1.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p1.addWalkingCount(1);
+//                        }
+//                    }
+//
+//                    collisonCheckX[p2.getX() + 38] = 0;
+//                    collisonCheckX[p2.getX() + 39] = 0;
+//                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 40] = -1;
+//                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 41] = -1;
+//                    p2.subX(2);
+//                    p2.getAttackBox().subPosition_x(2);
+//
+//                    // 애니메이션 변수
+//                    if (p2.getFrameCount() < p2.getRefreshRate()) {
+//                        p2.addFrameCount(1);
+//                    }
+//
+//                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
+//                        p2.setFrameCount(0);
+//                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
+//                            p2.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p2.addWalkingCount(1);
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }
 
         //둘 다 오른쪽으로 움직일 때
-        if ((p1.getVel().isMovingRight() && collisonCheckX[p1.getX() + p1.getCanvasLength() - 38] != 1) && (!p1.getVel().isAttacking() && !p1.getVel().isBlocking() && !p1.isDamaged())) {
-            if ((p2.getVel().isMovingRight() && collisonCheckX[p2.getX() + p2.getCanvasLength() - 38] != 1) && (!p2.getVel().isAttacking() && !p2.getVel().isBlocking() && !p2.isDamaged())) {
-                if ((smallX >= (canvasWidth - 700)) && bg.getBg_x() < bg.getBg_xMax()) { //배경화면 오른쪽으로 이동
-                    bg.setBgMovingLeft(true);
-                    bg.addBgX(bg.getRatio() * 2);
-
-                    // 플레이어 이외의 물체나 몬스터들
-                    z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
-                    for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                    }
-
-                    for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                    }
-
-                    for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                    }
-                    z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-
-
-
-                    // 플레이어 애니메이션 변수
-                    if (p1.getFrameCount() < p1.getRefreshRate()) {
-                        p1.addFrameCount(1);
-                    }
-
-                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
-                        p1.setFrameCount(0);
-                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
-                            p1.setWalkingCount(0);
-                        }
-                        else {
-                            p1.addWalkingCount(1);
-                        }
-                    }
-
-                    if (p2.getFrameCount() < p2.getRefreshRate()) {
-                        p2.addFrameCount(1);
-                    }
-
-                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
-                        p2.setFrameCount(0);
-                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
-                            p2.setWalkingCount(0);
-                        }
-                        else {
-                            p2.addWalkingCount(1);
-                        }
-                    }
-                }
-                else if (p1.getX() + p1.getCanvasLength() < canvasWidth && p2.getX() + p2.getCanvasLength() < canvasWidth){ // 그냥 각자 움직이는 경우
-                    collisonCheckX[p1.getX() + 40] = -1;
-                    collisonCheckX[p1.getX() + 41] = -1;
-                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 39] = 0;
-                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 38] = 0;
-                    p1.addX(2);
-                    p1.getAttackBox().addPosition_x(2);
-
-                    // 애니메이션 변수
-                    if (p1.getFrameCount() < p1.getRefreshRate()) {
-                        p1.addFrameCount(1);
-                    }
-
-                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
-                        p1.setFrameCount(0);
-                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
-                            p1.setWalkingCount(0);
-                        }
-                        else {
-                            p1.addWalkingCount(1);
-                        }
-                    }
-
-                    collisonCheckX[p2.getX() + 40] = -1;
-                    collisonCheckX[p2.getX() + 41] = -1;
-                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 39] = 0;
-                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 38] = 0;
-                    p2.addX(2);
-                    p2.getAttackBox().addPosition_x(2);
-
-                    // 애니메이션 변수
-                    if (p2.getFrameCount() < p2.getRefreshRate()) {
-                        p2.addFrameCount(1);
-                    }
-
-                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
-                        p2.setFrameCount(0);
-                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
-                            p2.setWalkingCount(0);
-                        }
-                        else {
-                            p2.addWalkingCount(1);
-                        }
-                    }
-
-                }
-            }
-        }
+//        if (((p1.getVel().isMovingRight() && collisonCheckX[p1.getX() + p1.getCanvasLength() - 38] != 1) && (!p1.getVel().isAttacking() && !p1.getVel().isBlocking() && !p1.isDamaged()))||((p2.getVel().isMovingRight() && collisonCheckX[p2.getX() + p2.getCanvasLength() - 38] != 1) && (!p2.getVel().isAttacking() && !p2.getVel().isBlocking() && !p2.isDamaged()))) {
+//            if (true) {
+//                if ((smallX >= (canvasWidth - 700)) && bg.getBg_x() < bg.getBg_xMax()) { //배경화면 왼쪽으로 이동
+//                    bg.setBgMovingLeft(true);
+//                    bg.addBgX(bg.getRatio() * 2);
+//
+//                    // 플레이어 이외의 물체나 몬스터들
+//                    if(!p1.getVel().isMovingRight()){
+//                        p1.moveObjectLeft(collisonCheckX);
+//                    }
+//                    if(!p2.getVel().isMovingRight()){
+//                        p2.moveObjectLeft(collisonCheckX);
+//                    }
+//                    z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
+//                    for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
+//                        z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+//                    }
+//
+//                    for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
+//                        z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+//                    }
+//
+//                    for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
+//                        z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+//                    }
+//                    z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+//
+//
+//
+//                    // 플레이어 애니메이션 변수
+//                    if (p1.getFrameCount() < p1.getRefreshRate()) {
+//                        p1.addFrameCount(1);
+//                    }
+//
+//                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
+//                        p1.setFrameCount(0);
+//                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
+//                            p1.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p1.addWalkingCount(1);
+//                        }
+//                    }
+//
+//                    if (p2.getFrameCount() < p2.getRefreshRate()) {
+//                        p2.addFrameCount(1);
+//                    }
+//
+//                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
+//                        p2.setFrameCount(0);
+//                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
+//                            p2.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p2.addWalkingCount(1);
+//                        }
+//                    }
+//                }
+//                else if (p1.getX() + p1.getCanvasLength() < canvasWidth && p2.getX() + p2.getCanvasLength() < canvasWidth){ // 그냥 각자 움직이는 경우
+//                    collisonCheckX[p1.getX() + 40] = -1;
+//                    collisonCheckX[p1.getX() + 41] = -1;
+//                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 39] = 0;
+//                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 38] = 0;
+//                    p1.addX(2);
+//                    p1.getAttackBox().addPosition_x(2);
+//
+//                    // 애니메이션 변수
+//                    if (p1.getFrameCount() < p1.getRefreshRate()) {
+//                        p1.addFrameCount(1);
+//                    }
+//
+//                    else if (p1.getFrameCount() == p1.getRefreshRate()) {
+//                        p1.setFrameCount(0);
+//                        if (p1.getWalkingCount() == p1.getWalkingLoop() - 1) {
+//                            p1.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p1.addWalkingCount(1);
+//                        }
+//                    }
+//
+//                    collisonCheckX[p2.getX() + 40] = -1;
+//                    collisonCheckX[p2.getX() + 41] = -1;
+//                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 39] = 0;
+//                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 38] = 0;
+//                    p2.addX(2);
+//                    p2.getAttackBox().addPosition_x(2);
+//
+//                    // 애니메이션 변수
+//                    if (p2.getFrameCount() < p2.getRefreshRate()) {
+//                        p2.addFrameCount(1);
+//                    }
+//
+//                    else if (p2.getFrameCount() == p2.getRefreshRate()) {
+//                        p2.setFrameCount(0);
+//                        if (p2.getWalkingCount() == p2.getWalkingLoop() - 1) {
+//                            p2.setWalkingCount(0);
+//                        }
+//                        else {
+//                            p2.addWalkingCount(1);
+//                        }
+//                    }
+//
+//                }
+//            }
+//        }
 
         //플레이어1 이 가만히 서 있는 경우
         if (p1.getVel().isAttacking() == false && p1.getVel().isMoving() == false && p1.getVel().isBlocking() == false) {
@@ -771,15 +790,42 @@ public class GameUtil {
         }
 
         //플래이어1 이 왼쪽으로 이동하는 경우
-        if ((p1.getVel().isMovingLeft() == true && collisonCheckX[p1.getX() + 38] != 1) && (p1.getVel().isAttacking() == false && p1.getVel().isBlocking() == false && p1.isDamaged() == false)) {
+        if ((p1.getVel().isMovingLeft() && collisonCheckX[p1.getX() + 38] != 1) && (!p1.getVel().isAttacking() && !p1.getVel().isBlocking() && !p1.isDamaged())) {
             log.info("p1 go left");
-            if (p1.getX() > 0 && !p2.getVel().isMovingLeft()) {
+            if ((bigX <= 800) && bg.getBg_x() > 0) { //배경화면 오른쪽으로 이동
+                bg.setBgMovingRight(true);
+                bg.subBgX(bg.getRatio() * 2);
+
+
+//                 플레이어 이외의 물체나 몬스터들
+//                if(!p1.getVel().isMovingLeft()){
+                p1.moveObjectRight(collisonCheckX);
+//                }
+                if(!p2.getVel().isMovingLeft()){
+                    p2.moveObjectRight(collisonCheckX);
+                }
+                z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
+                for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
+                    z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
+                    z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
+                    z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+                z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+
+            }
+            if (p1.getX() > 0) {
                 collisonCheckX[p1.getX() + 38] = 0;
                 collisonCheckX[p1.getX() + 39] = 0;
                 collisonCheckX[p1.getX() + p1.getCanvasLength() - 40] = -1;
                 collisonCheckX[p1.getX() + p1.getCanvasLength() - 41] = -1;
                 p1.subX(2);
-                p1.getAttackBox().subPosition_x(2);
+//                p1.getAttackBox().subPosition_x(2);
 
                 // 애니메이션 변수
                 if (p1.getFrameCount() < p1.getRefreshRate()) {
@@ -801,13 +847,38 @@ public class GameUtil {
         //플래이어1이 오른쪽으로 이동하는 경우
         if ((p1.getVel().isMovingRight() == true && collisonCheckX[p1.getX() + p1.getCanvasLength() - 38] != 1) && (p1.getVel().isAttacking() == false && p1.getVel().isBlocking() == false && p1.isDamaged() == false)) {
             log.info("p1 go right");
-            if (p1.getX() < canvasWidth  - p1.getCanvasLength() && !p2.getVel().isMovingRight()) {//canvas_width
+            if ((smallX >= (canvasWidth - 700)) && bg.getBg_x() < bg.getBg_xMax()) { //배경화면 왼쪽으로 이동
+                bg.setBgMovingLeft(true);
+                bg.addBgX(bg.getRatio() * 2);
+
+                // 플레이어 이외의 물체나 몬스터들
+//                if(!p1.getVel().isMovingRight()){
+                p1.moveObjectLeft(collisonCheckX);
+//                }
+                if(!p2.getVel().isMovingRight()){
+                    p2.moveObjectLeft(collisonCheckX);
+                }
+                z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
+                for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
+                    z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
+                    z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
+                    z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+                z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+            }
+            if (p1.getX() < canvasWidth  - p1.getCanvasLength()) {//canvas_width
                 collisonCheckX[p1.getX() + 40] = -1;
                 collisonCheckX[p1.getX() + 41] = -1;
                 collisonCheckX[p1.getX() + p1.getCanvasLength() - 39] = 0;
                 collisonCheckX[p1.getX() + p1.getCanvasLength() - 38] = 0;
                 p1.addX(2);
-                p1.getAttackBox().addPosition_x(2);
+//                p1.getAttackBox().addPosition_x(2);
 
                 // 애니메이션 변수
                 if (p1.getFrameCount() < p1.getRefreshRate()) {
@@ -965,13 +1036,39 @@ public class GameUtil {
         //플래이어2 가 왼쪽으로 이동하는 경우
         if ((p2.getVel().isMovingLeft() == true && collisonCheckX[p2.getX() + 38] != 1) && (p2.getVel().isAttacking() == false && p2.getVel().isBlocking() == false && p2.isDamaged() == false)) {
             log.info("p2 go left");
-            if (p2.getX() > 0 && !p1.getVel().isMovingLeft()) {
+            if ((bigX <= 800) && bg.getBg_x() > 0) { //배경화면 오른쪽으로 이동
+                bg.setBgMovingRight(true);
+                bg.subBgX(bg.getRatio() * 2);
+
+
+                // 플레이어 이외의 물체나 몬스터들
+                if(!p1.getVel().isMovingLeft()){
+                    p1.moveObjectRight(collisonCheckX);
+                }
+//                if(!p2.getVel().isMovingLeft()){
+                p2.moveObjectRight(collisonCheckX);
+//                }
+                z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
+                for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
+                    z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
+                    z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
+                    z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+                z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+            }
+            if (p2.getX() > 0) {
                 collisonCheckX[p2.getX() + 38] = 0;
                 collisonCheckX[p2.getX() + 39] = 0;
                 collisonCheckX[p2.getX() + p2.getCanvasLength() - 40] = -1;
                 collisonCheckX[p2.getX() + p2.getCanvasLength() - 41] = -1;
                 p2.subX(2);
-                p2.getAttackBox().subPosition_x(2);
+//                p2.getAttackBox().subPosition_x(2);
 
                 // 애니메이션 변수
                 if (p2.getFrameCount() < p2.getRefreshRate()) {
@@ -993,13 +1090,38 @@ public class GameUtil {
         //플래이어2가 오른쪽으로 이동하는 경우
         if ((p2.getVel().isMovingRight() && collisonCheckX[p2.getX() + p2.getCanvasLength() - 38] != 1) && (!p2.getVel().isAttacking() && !p2.getVel().isBlocking() && !p2.isDamaged())) {
             log.info("p1 go right");
-            if (p2.getX() < canvasWidth - p2.getCanvasLength() && !p1.getVel().isMovingRight()) {
+            if ((smallX >= (canvasWidth - 700)) && bg.getBg_x() < bg.getBg_xMax()) { //배경화면 왼쪽으로 이동
+                bg.setBgMovingLeft(true);
+                bg.addBgX(bg.getRatio() * 2);
+
+                // 플레이어 이외의 물체나 몬스터들
+                if(!p1.getVel().isMovingRight()){
+                    p1.moveObjectLeft(collisonCheckX);
+                }
+//                if(!p2.getVel().isMovingRight()){
+                p2.moveObjectLeft(collisonCheckX);
+//                }
+                z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(),room.getCurrentStageNum());
+                for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
+                    z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
+                    z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+
+                for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
+                    z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
+                }
+                z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+            }
+            if (p2.getX() < canvasWidth - p2.getCanvasLength()) {
                 collisonCheckX[p2.getX() + 40] = -1;
                 collisonCheckX[p2.getX() + 41] = -1;
                 collisonCheckX[p2.getX() + p2.getCanvasLength() - 39] = 0;
                 collisonCheckX[p2.getX() + p2.getCanvasLength() - 38] = 0;
                 p2.addX(2);
-                p2.getAttackBox().addPosition_x(2);
+//                p2.getAttackBox().addPosition_x(2);
 
                 // 애니메이션 변수
                 if (p2.getFrameCount() < p2.getRefreshRate()) {
@@ -1204,8 +1326,8 @@ public class GameUtil {
                     p2.setX(300);
                     bg.setBg_x(0);
 
-                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
+//                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+//                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
@@ -1217,8 +1339,8 @@ public class GameUtil {
                     p2.setX(1800);
                     bg.setBg_x(bg.getBg_xMax());
 
-                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
+//                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+//                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
@@ -1236,8 +1358,8 @@ public class GameUtil {
                     p2.setX(300);
                     bg.setBg_x(0);
 
-                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
+//                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+//                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
@@ -1248,8 +1370,8 @@ public class GameUtil {
                     p1.setX(1500);
                     p2.setX(1800);
                     bg.setBg_x(bg.getBg_xMax());
-                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
-                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
+//                    p1.setPositionX(p1.getX(),p1.getCanvasLength());
+//                    p2.setPositionX(p2.getX(),p2.getCanvasLength());
 //                    p1.getAttackBox().setPosition_x(p1.getX()+p1.getCanvasLength()/2);
 //                    p2.getAttackBox().setPosition_x(p2.getX()+p2.getCanvasLength()/2);
                     Arrays.fill(collisonCheckX,-1);
