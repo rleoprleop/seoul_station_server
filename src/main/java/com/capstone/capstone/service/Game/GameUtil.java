@@ -344,7 +344,7 @@ public class GameUtil {
         for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
             z.getNormalZombieMap().get(i).updateAnimation(room.getCurrentStageNum());
 
-            if ((z.getNormalZombieMap().get(i).getVel().isAttacking() == true || z.getNormalZombieMap().get(i).isAttackDone() == false) && z.getNormalZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) {
+            if ((!z.getNormalZombieMap().get(i).isDead()) && ((z.getNormalZombieMap().get(i).getVel().isAttacking() == true || z.getNormalZombieMap().get(i).isAttackDone() == false) && z.getNormalZombieMap().get(i).getStageNum() == room.getCurrentStageNum())) {
                 z.getNormalZombieMap().get(i).zombieAttack(p1, p2,collisonCheckX);
             }
 
@@ -356,7 +356,7 @@ public class GameUtil {
         for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
             z.getCrawlingZombieMap().get(i).updateAnimation(room.getCurrentStageNum());
 
-            if ((z.getCrawlingZombieMap().get(i).getVel().isAttacking() == true || z.getCrawlingZombieMap().get(i).isAttackDone() == false) && z.getCrawlingZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) {
+            if ((!z.getCrawlingZombieMap().get(i).isDead()) && ((z.getCrawlingZombieMap().get(i).getVel().isAttacking() == true || z.getCrawlingZombieMap().get(i).isAttackDone() == false) && z.getCrawlingZombieMap().get(i).getStageNum() == room.getCurrentStageNum())) {
                 z.getCrawlingZombieMap().get(i).zombieAttack(p1, p2,collisonCheckX);
             }
 
@@ -368,7 +368,7 @@ public class GameUtil {
         for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
             z.getRunningZombieMap().get(i).updateAnimation(room.getCurrentStageNum());
 
-            if ((z.getRunningZombieMap().get(i).getVel().isAttacking() == true || z.getRunningZombieMap().get(i).isAttackDone() == false) && z.getRunningZombieMap().get(i).getStageNum() == room.getCurrentStageNum()) {
+            if ((!z.getRunningZombieMap().get(i).isDead()) && ((z.getRunningZombieMap().get(i).getVel().isAttacking() == true || z.getRunningZombieMap().get(i).isAttackDone() == false) && z.getRunningZombieMap().get(i).getStageNum() == room.getCurrentStageNum())) {
                 z.getRunningZombieMap().get(i).zombieAttack(p1, p2,collisonCheckX);
             }
 
@@ -378,7 +378,7 @@ public class GameUtil {
         }
         z.getBossZombieMap().get(0).updateAnimation(room.getCurrentStageNum());
 
-        if ((z.getBossZombieMap().get(0).getVel().isAttacking() == true || z.getBossZombieMap().get(0).isAttackDone() == false) && z.getBossZombieMap().get(0).getStageNum() == room.getCurrentStageNum()) {
+        if ((!z.getBossZombieMap().get(0).isDead()) && ((z.getBossZombieMap().get(0).getVel().isAttacking() == true || z.getBossZombieMap().get(0).isAttackDone() == false) && z.getBossZombieMap().get(0).getStageNum() == room.getCurrentStageNum())) {
             z.getBossZombieMap().get(0).zombieAttack(p1, p2,collisonCheckX);
         }
 
