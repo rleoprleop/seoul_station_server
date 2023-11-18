@@ -427,7 +427,7 @@ public class CrawlingZombie extends NormalZombie{
             }
         }
         else if (this.isDead() == true) { // 죽었거나 해당 스테이지가 아닐때
-            for (int i = 0; i <= this.getAttackBox().getWidth(); i++) {
+            for (int i = 0; i <= this.getCanvasLength(); i++) {
                 collisonCheckX[this.getX() + i] = -1;
             }
         }

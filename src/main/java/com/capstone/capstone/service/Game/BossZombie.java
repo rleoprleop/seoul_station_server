@@ -572,7 +572,7 @@ public class BossZombie extends NormalZombie{
 
         }
         else if (this.isDead() == true) { //몹이 죽은 경우
-            for (int i = 0; i <= this.getWidth(); i++) {
+            for (int i = 0; i <= this.getCanvasLength(); i++) {
                 collisonCheckX[this.getX() + i] = -1;
             }
         }

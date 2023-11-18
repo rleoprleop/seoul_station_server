@@ -23,6 +23,10 @@ public class AttackBox {
     public void addAtkTimer(int i){
         atkTimer+=i;
     }
+    public void setPositionXY(int position_x, int position_y){
+        this.position_x=position_x;
+        this.position_y=position_y;
+    }
 
     public void subPosition_x(int i) {
         position_x-=i;
