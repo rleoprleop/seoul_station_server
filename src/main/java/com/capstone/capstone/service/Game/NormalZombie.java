@@ -356,9 +356,9 @@ public class NormalZombie extends Creature{
 
 
         if (this.dead == false && this.getVel().isAttacking() == false && this.stunned == false && this.stageNum == currentStageNum) {
-            for (int i = 0; i <= this.getCanvasLength() - 100; i++) {
-                collisonCheckX[this.getX() + 50 + i] = 1;
-            }
+//            for (int i = 0; i <= this.getCanvasLength() - 100; i++) {
+//                collisonCheckX[this.getX() + 50 + i] = 1;
+//            }
 
 
             // 플레이어가 탐지 범위 안에 들어온 경우
@@ -378,16 +378,16 @@ public class NormalZombie extends Creature{
                     if (this.x_detectLeft < bigX && bigX < this.x_attackLeft) { //왼쪽으로 이동
                         this.getVel().setMoving(true);
                         this.getVel().setLookingRight(false);
-                        collisonCheckX[this.getX() + 49] = 1;
-                        collisonCheckX[this.getX() + this.getCanvasLength() - 50] = -1;
+//                        collisonCheckX[this.getX() + 49] = 1;
+//                        collisonCheckX[this.getX() + this.getCanvasLength() - 50] = -1;
                         this.subX(1);
                     }
 
                     else if (this.x_attackRight < smallX && smallX <= this.x_detectRight) { //오른쪽으로 이동
                         this.getVel().setMoving(true);
                         this.getVel().setLookingRight(true);
-                        collisonCheckX[this.getX() + 50] = -1;
-                        collisonCheckX[this.getX() + this.getCanvasLength() - 49] = 1;
+//                        collisonCheckX[this.getX() + 50] = -1;
+//                        collisonCheckX[this.getX() + this.getCanvasLength() - 49] = 1;
                         this.addX(1);
                     }
                 }
@@ -425,8 +425,8 @@ public class NormalZombie extends Creature{
                         if ((this.move_randNum % 2 == 0) && this.moveCount < this.move_randNum) { //짝수인 경우 -> 오른쪽으로 이동
                             if (this.getX() + this.getCanvasLength() + this.speed <= this.xMax_right) { //고정 범위 안에 있는 경우
                                 this.getVel().setMoving(true);
-                                collisonCheckX[this.getX() + 50] = -1;
-                                collisonCheckX[this.getX() + this.getCanvasLength() -49] = 1;
+//                                collisonCheckX[this.getX() + 50] = -1;
+//                                collisonCheckX[this.getX() + this.getCanvasLength() -49] = 1;
                                 this.getVel().setLookingRight(true);
                                 this.addX(speed);
                                 this.moveCount+=this.speed;
@@ -440,8 +440,8 @@ public class NormalZombie extends Creature{
                         else if ((this.move_randNum % 2 == 1) && this.moveCount < this.move_randNum) {//홀수인 경우 -> 왼쪽으로 이동
                             if (this.getX() - this.speed >= this.xMax_left) { //고정 범위 안에 있는 경우
                                 this.getVel().setMoving(true);
-                                collisonCheckX[this.getX() + 49] = 1;
-                                collisonCheckX[this.getX() + this.getCanvasLength() - 50] = -1;
+//                                collisonCheckX[this.getX() + 49] = 1;
+//                                collisonCheckX[this.getX() + this.getCanvasLength() - 50] = -1;
                                 this.getVel().setLookingRight(false);
                                 this.subX(speed);
                                 this.moveCount+=this.speed;
@@ -462,12 +462,13 @@ public class NormalZombie extends Creature{
             }
         }
 
-        else if (this.dead) { //몹이 죽었을 경우
-            log.info("{}",getX());
-            for (int j = 0; j <= this.getCanvasLength(); j++) {
-                collisonCheckX[this.getX() + j] = -1;
-            }
-        }
+//        else if (this.dead) { //몹이 죽었을 경우
+//            log.info("{}",getX());
+//            for (int j = 0; j <= this.getCanvasLength()-100; j++) {
+//                collisonCheckX[this.getX() + 50 + j] = -1;
+//            }
+//        }
+//        return collisonCheckX;
     }
 
     public void checkAttacked(int atkTimer_p1,int[] collisonCheckX) {//공격이 해당 물체에 가해졌는지 확인
@@ -541,32 +542,32 @@ public class NormalZombie extends Creature{
 
     public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
         if (objStageNum == currentStageNum) {
-            collisonCheckX[getX() + 50] = -1;
-            collisonCheckX[getX() + 51] = -1;
-            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
-            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+//            collisonCheckX[getX() + 50] = -1;
+//            collisonCheckX[getX() + 51] = -1;
+//            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+//            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
             addX(2);
 
             xMax_left+=2;
             xMax_right+=2;
 //            setFixedRange(xMax_left+2, xMax_right+2);
         }
-
+//        return collisonCheckX;
     }
 
     public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
         if (objStageNum == currentStageNum) {
-            collisonCheckX[getX() + 48] = 1;
-            collisonCheckX[getX() + 49] = 1;
-            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
-            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+//            collisonCheckX[getX() + 48] = 1;
+//            collisonCheckX[getX() + 49] = 1;
+//            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+//            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
             subX(2);
 
-            xMax_left+=2;
-            xMax_right+=2;
+            xMax_left-=2;
+            xMax_right-=2;
 //            setFixedRange(xMax_left-2, xMax_right-2);
         }
-
+//        return collisonCheckX;
     }
 
     public void addStunAnimaitonCount(int i) {

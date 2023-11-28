@@ -53,10 +53,6 @@ public class StuckedZombie {
     }
 
     public void attack(int[] collisonCheckX, Player p1, Player p2) {
-
-        for (int i = 0; i <= this.canvasLength - 100; i++) {
-            collisonCheckX[this.x + 50 + i] = 1;
-        }
         if (this.stunned == false && this.dead == false) {
             this.checkStunned(p1, p2);
             if (this.attackCount < 20 && this.attackCut < 2) {
@@ -91,6 +87,7 @@ public class StuckedZombie {
                 this.deathCut++;
             }
         }
+//        return collisonCheckX;
     }
 
 
@@ -128,23 +125,23 @@ public class StuckedZombie {
 
     public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
         if (objStageNum == currentStageNum) {
-            collisonCheckX[x + 50] = -1;
-            collisonCheckX[x + 51] = -1;
-            collisonCheckX[x + canvasLength - 49] = 1;
-            collisonCheckX[x + canvasLength - 48] = 1;
+//            collisonCheckX[x + 50] = -1;
+//            collisonCheckX[x + 51] = -1;
+//            collisonCheckX[x + canvasLength - 49] = 1;
+//            collisonCheckX[x + canvasLength - 48] = 1;
             x+=2;
         }
-
+//        return collisonCheckX;
     }
 
     public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
         if (objStageNum == currentStageNum) {
-            collisonCheckX[x + 48] = 1;
-            collisonCheckX[x + 49] = 1;
-            collisonCheckX[x + canvasLength - 50] = -1;
-            collisonCheckX[x + canvasLength - 51] = -1;
+//            collisonCheckX[x + 48] = 1;
+//            collisonCheckX[x + 49] = 1;
+//            collisonCheckX[x + canvasLength - 50] = -1;
+//            collisonCheckX[x + canvasLength - 51] = -1;
             x-=2;
         }
-
+//        return collisonCheckX;
     }
 }

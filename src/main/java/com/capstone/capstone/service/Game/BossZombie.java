@@ -105,7 +105,7 @@ public class BossZombie extends NormalZombie{
         this.distanceOfBigX = Math.abs(this.centerPoint - bigX);
     }
 
-    public void flyToTarget(Player p1, Player p2, int[] collisonCheckX) {
+    public int[] flyToTarget(Player p1, Player p2, int[] collisonCheckX) {
         if (this.jumpCount == 1) {
             for (int i = 0; i <= this.getCanvasLength() - 100; i++) { // 점프 하는 자리 없는 걸로 취급
                 collisonCheckX[this.getX() + 50 + i] = -1;
@@ -220,6 +220,7 @@ public class BossZombie extends NormalZombie{
                 }
             }
         }
+        return collisonCheckX;
     }
 
     public int updateMoveRandNum() {
@@ -489,12 +490,12 @@ public class BossZombie extends NormalZombie{
         //살아있고, 공격중이 아니고, 현재 스테이지에 해당되면 움직임
         if (this.isDead() == false && this.getVel().isAttacking() == false && this.stageNum == currentStageNum) {
             this.getVel().setMoving(true);
-            for (int i = 0; i <= this.getCanvasLength() - 100; i++) { // 위치 정보 갱신
-                collisonCheckX[this.getX() + 50 + i] = 1;
-            }
+//            for (int i = 0; i <= this.getCanvasLength() - 100; i++) { // 위치 정보 갱신
+//                collisonCheckX[this.getX() + 50 + i] = 1;
+//            }
 
             if (this.moveRandNum >= 8) { //공중 이동중
-                this.flyToTarget(p1, p2,collisonCheckX);
+                collisonCheckX = this.flyToTarget(p1, p2,collisonCheckX);
             }
 
             else if (this.moveRandNum < 8) { // 공중이동 아닌 경우 -> 일반 이동
@@ -571,12 +572,12 @@ public class BossZombie extends NormalZombie{
             }
 
         }
-        else if (this.isDead() == true) { //몹이 죽은 경우
-            for (int i = 0; i <= this.getCanvasLength(); i++) {
-                collisonCheckX[this.getX() + i] = -1;
-            }
-        }
-
+//        else if (this.isDead() == true) { //몹이 죽은 경우
+//            for (int i = 0; i <= this.getCanvasLength()-100; i++) {
+//                collisonCheckX[this.getX()+50 + i] = -1;
+//            }
+//        }
+//        return collisonCheckX;
     }
     public void checkAttacked(int atkTimer_p1, int[] collisonCheckX) {//공격이 해당 물체에 가해졌는지 확인
         if ((collisonCheckX[atkTimer_p1] == 1) && (this.getX() <= atkTimer_p1 && atkTimer_p1 <= this.getX() + this.getCanvasLength()) && this.isDead() == false && this.flying == false) {
@@ -691,32 +692,32 @@ public class BossZombie extends NormalZombie{
         }
     }
     public void moveObjectRight(int[] collisonCheckX, int objStageNum, int currentStageNum) {
-        if (objStageNum == currentStageNum) {
-            collisonCheckX[getX() + 50] = -1;
-            collisonCheckX[getX() + 51] = -1;
-            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
-            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
+        if (objStageNum == currentStageNum && getX()>0) {
+//            collisonCheckX[getX() + 50] = -1;
+//            collisonCheckX[getX() + 51] = -1;
+//            collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+//            collisonCheckX[getX() + getCanvasLength() - 48] = 1;
             addX(2);
 
             xMax_left+=2;
             xMax_right+=2;
 //            setFixedRange(xMax_left+2, xMax_right+2);
         }
-
+//        return collisonCheckX;
     }
 
     public void moveObjectLeft(int[] collisonCheckX, int objStageNum, int currentStageNum) {
-        if (objStageNum == currentStageNum) {
-            collisonCheckX[getX() + 48] = 1;
-            collisonCheckX[getX() + 49] = 1;
-            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
-            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+        if (objStageNum == currentStageNum && getX()>0) {
+//            collisonCheckX[getX() + 48] = 1;
+//            collisonCheckX[getX() + 49] = 1;
+//            collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+//            collisonCheckX[getX() + getCanvasLength() - 51] = -1;
             subX(2);
 
-            xMax_left+=2;
-            xMax_right+=2;
+            xMax_left-=2;
+            xMax_right-=2;
 //            setFixedRange(xMax_left-2, xMax_right-2);
         }
-
+//        return collisonCheckX;
     }
 }
