@@ -73,19 +73,21 @@ public class Player extends Creature{
         getAttackBox().setPosition_x(x+canvasLength/2);
     }
     public void moveObjectRight(int[] collisonCheckX) {
-        collisonCheckX[getX() + 50] = -1;
-        collisonCheckX[getX() + 51] = -1;
-        collisonCheckX[getX() + getCanvasLength() - 49] = 0;
-        collisonCheckX[getX() + getCanvasLength() - 48] = 0;
+//        collisonCheckX[getX() + 40] = -1;
+//        collisonCheckX[getX() + 41] = -1;
+//        collisonCheckX[getX() + getCanvasLength() - 39] = 0;
+//        collisonCheckX[getX() + getCanvasLength() - 38] = 0;
         addX(2);
+//        return collisonCheckX;
     }
 
     public void moveObjectLeft(int[] collisonCheckX) {
-        collisonCheckX[getX() + 48] = 0;
-        collisonCheckX[getX() + 49] = 0;
-        collisonCheckX[getX() + getCanvasLength() - 50] = -1;
-        collisonCheckX[getX() + getCanvasLength() - 51] = -1;
+//        collisonCheckX[getX() + 38] = 0;
+//        collisonCheckX[getX() + 39] = 0;
+//        collisonCheckX[getX() + getCanvasLength() - 40] = -1;
+//        collisonCheckX[getX() + getCanvasLength() - 41] = -1;
         subX(2);
+//        return collisonCheckX;
     }
 
     public void subAttackTimer(int i) {
