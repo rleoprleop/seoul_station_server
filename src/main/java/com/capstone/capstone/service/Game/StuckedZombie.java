@@ -76,9 +76,9 @@ public class StuckedZombie {
             this.stun();
         }
         else if (this.dead == true) {
-            for (int i = 0; i <= this.canvasLength - 100; i++) {
-                collisonCheckX[this.x + 50 + i] = -1;
-            }
+//            for (int i = 0; i <= this.canvasLength - 100; i++) {
+//                collisonCheckX[this.x + 50 + i] = -1;
+//            }
             if (this.deathCount < 20 && this.deathCut < 4) {
                 this.deathCount++;
             }
@@ -117,7 +117,6 @@ public class StuckedZombie {
             this.healthCount--;
             this.hitCheck=true;
             if (this.healthCount == 0) {
-                //console.log('nz1 dead');
                 this.dead = true;
             }
         }

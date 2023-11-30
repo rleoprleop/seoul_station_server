@@ -77,8 +77,8 @@ public class NormalZombie extends Creature{
         if(getX() < (xMax_left + xMax_right) / 2) { //왼쪽으로 벗어난 경우
             if (getX() != (xMax_left + xMax_right) / 2) { //가운데로 올 때까지 이동
                 getVel().setLookingRight(true);
-                collisonCheckX[getX() + 50] = -1;
-                collisonCheckX[getX() + getCanvasLength() - 49] = 1;
+//                collisonCheckX[getX() + 50] = -1;
+//                collisonCheckX[getX() + getCanvasLength() - 49] = 1;
                 addX(1);
             }
         }
@@ -86,8 +86,8 @@ public class NormalZombie extends Creature{
             if (getX() != (xMax_left + xMax_right) / 2) { //가운데로 올 때까지 이동
 
                 getVel().setLookingRight(false);
-                collisonCheckX[getX() + 49] = 1;
-                collisonCheckX[getX() + getCanvasLength() - 50] = -1;
+//                collisonCheckX[getX() + 49] = 1;
+//                collisonCheckX[getX() + getCanvasLength() - 50] = -1;
                 subX(1);
             }
         }
@@ -476,6 +476,8 @@ public class NormalZombie extends Creature{
             this.subHealthCount(1);
             this.hitCheck=true;
             if (this.getHealthCount() == 0) {
+                this.getVel().setAttacking(false);
+                this.attackDone = true;
                 this.dead = true;
             }
         }

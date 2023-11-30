@@ -125,13 +125,13 @@ public class CrawlingZombie extends NormalZombie{
     }
 
     public void zombieAttack(Player p1, Player p2, int[] collisonCheckX) {
+        this.setAttackDone(false);
         this.checkBigXSmallX(p1, p2);
         log.info("bigX: {}, rangedAttack_left: {}, smallX: {}, rangedAttack_right: {}, x_attackRight: {}, x_AttackLeft: {}",bigX,rangedAttack_left,smallX,rangedAttack_right, getX_attackRight(), getX_attackLeft());
-        if ((this.bigX >= this.rangedAttack_left && this.bigX <= this.getX() + 100) || (this.rangedAttackDone == false && this.getVel().isLookingRight()==false)) { //왼쪽으로 공격 하는 경우
+        if ((this.bigX >= this.rangedAttack_left && this.bigX <= this.getX() + 100) || this.rangedAttackDone == false) { //왼쪽으로 공격 하는 경우
             this.getVel().setLookingRight(false);
             //원거리 공격
             if ((this.bigX >= this.rangedAttack_left && this.bigX < this.getX_attackLeft()) || this.rangedAttackDone == false) {
-                this.setAttackDone(false);
                 log.info("long range attack L");
                 this.rangedAttackDone = false;
                 this.spitting = true;
@@ -235,7 +235,7 @@ public class CrawlingZombie extends NormalZombie{
             }
 
         }
-        else if ((this.getX() + 100 < this.smallX && this.smallX <= this.rangedAttack_right) || (this.rangedAttackDone == false && this.getVel().isLookingRight())) { // 오른쪽 공격
+        else if ((this.getX() + 100 < this.smallX && this.smallX <= this.rangedAttack_right) || (this.rangedAttackDone == false)) { // 오른쪽 공격
             this.getVel().setLookingRight(true);
             //원거리 공격
             if ((this.getX_attackRight() < this.smallX && this.smallX <= this.rangedAttack_right) || this.rangedAttackDone == false) {
@@ -401,8 +401,8 @@ public class CrawlingZombie extends NormalZombie{
                         if ((this.getMove_randNum() % 2 == 0) && this.getMoveCount() < this.getMove_randNum()) { //짝수인 경우 -> 오른쪽으로 이동
                             if (this.getX() + this.getCanvasLength() + this.getSpeed() <= this.xMax_right) { //고정 범위 안에 있는 경우
                                 this.getVel().setMoving(true);
-                                collisonCheckX[this.getX() + 50] = -1;
-                                collisonCheckX[this.getX() + this.getCanvasLength() -49] = 1;
+//                                collisonCheckX[this.getX() + 50] = -1;
+//                                collisonCheckX[this.getX() + this.getCanvasLength() -49] = 1;
                                 this.getVel().setLookingRight(true);
                                 this.addX(this.getSpeed());
                                 this.addMoveCount(this.getSpeed());
@@ -417,8 +417,8 @@ public class CrawlingZombie extends NormalZombie{
                             //console.log(this.x - this.speed);
                             if (this.getX() - this.getSpeed() >= this.xMax_left) { //고정 범위 안에 있는 경우
                                 this.getVel().setMoving(true);
-                                collisonCheckX[this.getX() + 49] = 1;
-                                collisonCheckX[this.getX() + this.getCanvasLength() - 50] = -1;
+//                                collisonCheckX[this.getX() + 49] = 1;
+//                                collisonCheckX[this.getX() + this.getCanvasLength() - 50] = -1;
                                 this.getVel().setLookingRight(false);
                                 this.subX(this.getSpeed());
                                 this.addMoveCount(this.getSpeed());
@@ -463,6 +463,8 @@ public class CrawlingZombie extends NormalZombie{
             if (this.getVel().isMoving() == false) {
                 //플레이어가 해당 몬스터의 공격을 막았을 경우
                 if (this.isStunned() == true) {
+                    this.setAttackFrame(0);
+                    this.setAttackCount(0);
                     if (this.getStunCount() % 40 == 39) {
                         this.addStunAnimaitonCount(1);
                         this.setStunAnimaitonCount(this.getStunAnimaitonCount() % this.getStunLoop());

@@ -15,13 +15,15 @@ public class BackGround {
     private boolean bgMovingRight;
     private boolean bgMovingLeft;
     private int stageNum;
+    private int[] arr_bgImg_width= {5760, 11520, 11520, 11520, 5760, 7680, 9600};
+
     public BackGround(){
-        bg_length=1960;
+        bg_length=1920;
         bg_canvasLength=960;
         bg_x=0;
         bg_count=3;
-        bg_xMax=(1960*3)-1960*(1960/960);
-        ratio=1960/960;
+        bg_xMax=(this.arr_bgImg_width[0] * 960) / 1920 - 1920;
+        ratio=1920/960;
         bgMovingRight=false;
         bgMovingLeft=false;
         stageNum=0;
@@ -31,5 +33,8 @@ public class BackGround {
     }
     public void subBgX(int i){
         bg_x-=i;
+    }
+    public void updateBgMax(int currentStageNum){
+        this.bg_xMax = (this.arr_bgImg_width[currentStageNum] * 960) / 1920 - 1920;
     }
 }
