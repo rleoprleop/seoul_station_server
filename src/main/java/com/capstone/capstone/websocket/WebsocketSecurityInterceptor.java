@@ -35,8 +35,8 @@ public class WebsocketSecurityInterceptor implements ChannelInterceptor, Applica
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         webSocketService =  applicationContext.getBean("webSocketService",WebSocketService.class);
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
-        System.out.println("preSend, full message: "+headerAccessor);
-        log.info("{}",headerAccessor.getSessionId());
+        log.debug("preSend, full message: {}",headerAccessor);
+        log.debug("{}",headerAccessor.getSessionId());
         if (StompCommand.CONNECT.equals(headerAccessor.getCommand())) {
             String bearer=headerAccessor.getFirstNativeHeader("Authorization");
             String token = jwtTokenProvider.getTokenFromHeader(bearer);

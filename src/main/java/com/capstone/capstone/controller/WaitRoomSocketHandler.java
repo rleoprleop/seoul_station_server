@@ -50,8 +50,8 @@ public class WaitRoomSocketHandler {
 //        {
 //            webSocketService.playClear(waitRoomId);
 //        }
-        log.info("COMMEND: {}",stompHeaderAccessor.getCommand());
-        log.info("dto: {}",dto);
+        log.debug("COMMEND: {}",stompHeaderAccessor.getCommand());
+        log.debug("dto: {}",dto);
 //        if(dto.isActive()){
 //            webSocketService.createGame(waitRoomId,userId);
 //        }

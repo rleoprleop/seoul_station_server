@@ -118,11 +118,11 @@ public class WebSocketService {
         Room room = gameRoom.getRoom(waitRoomId);
         Player player = room.getPlayerMap().get(userId);
         if(dto.isKeydown()){
-            log.info("keydown, {}",dto.getKeyCode());
+            log.debug("keydown, {}",dto.getKeyCode());
             gameUtil.getUpdatedVelocityDown(dto,player);
         }
         else {
-            log.info("keyup, {}",dto.getKeyCode());
+            log.debug("keyup, {}",dto.getKeyCode());
             gameUtil.getUpdatedVelocityUp(dto,player);
         }
     }

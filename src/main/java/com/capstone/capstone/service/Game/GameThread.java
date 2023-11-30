@@ -50,8 +50,8 @@ public class GameThread {//게임 시작.
                         mapper.writeValue(baos, room);
                         gameUtil.gameLoop(room,userId1,userId2);
                         checkActive(room,roomId);
-                        log.info("Room: {}", baos.toString());
-                        log.info("roomId {}",roomId);
+                        log.debug("Room: {}", baos.toString());
+                        log.debug("roomId {}",roomId);
 //                        room.setTime(roomTime(room,roomId));
                         simpMessagingTemplate.convertAndSend("/sub/play/sub/"+roomId, room);
                     } catch (Exception e) {

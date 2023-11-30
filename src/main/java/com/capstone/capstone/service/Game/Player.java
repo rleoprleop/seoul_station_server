@@ -17,6 +17,7 @@ public class Player extends Creature{
     private int interactionLoop;
     private int interactionCut;
     private int interactionCount;
+    private int interactionPressCount;
     public Player(String name, int x, int y, int width, int height, int canvasLength, int healthMax){
         super(x,y,width,height,canvasLength, healthMax);
         this.name=name;
@@ -29,6 +30,7 @@ public class Player extends Creature{
         interactionLoop=3;
         interactionCut=0;
         interactionCount=0;
+        interactionPressCount = 0;
         blockBox=new BlockBox(x+canvasLength - 10, x+10,y+60);
         grabbed = false;
     }
@@ -40,7 +42,8 @@ public class Player extends Creature{
         else {
             this.setDead(false);
         }
-    }    public void addFrameCount(int i){
+    }
+    public void addFrameCount(int i){
         frameCount+=i;
     }
 
@@ -71,6 +74,10 @@ public class Player extends Creature{
     }
     public void setPositionX(int x, int canvasLength){
         getAttackBox().setPosition_x(x+canvasLength/2);
+    }
+
+    public void addInteractionPressCount(int i){
+        interactionPressCount+=i;
     }
     public void moveObjectRight(int[] collisonCheckX) {
 //        collisonCheckX[getX() + 40] = -1;
