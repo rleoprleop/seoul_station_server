@@ -841,42 +841,32 @@ public class GameUtil {
                 log.debug("p1 go left");
                 if ((bigX <= 10800) && bg.getBg_x() > 0 && !bg.isBgMovingRight()) { //배경화면 오른쪽으로 이동
                     bg.setBgMovingRight(true);
-                    bg.subBgX(bg.getRatio() * 2);
+                    bg.subBgX(2);
 
 
                     //                 플레이어 이외의 물체나 몬스터들
                     //                if(!p1.getVel().isMovingLeft()){
-                    p1.moveObjectRight(collisonCheckX);
+//                    p1.moveObjectRight(collisonCheckX);
                     //                }
-                    if (!p2.getVel().isMovingLeft() && !p2.isDead()) {
-                        p2.moveObjectRight(collisonCheckX);
-                    }
+                    p2.moveObjectRight(collisonCheckX);
+
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p1.getX() > 10000) {
+                else if (p1.getX() > 10000) {
 //                    collisonCheckX[p1.getX() + 38] = 0;
 //                    collisonCheckX[p1.getX() + 39] = 0;
 //                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 40] = -1;
@@ -902,42 +892,33 @@ public class GameUtil {
                 log.debug("p1 go left");
                 if ((bigX <= 800) && bg.getBg_x() > 0 && !bg.isBgMovingRight()) { //배경화면 오른쪽으로 이동
                     bg.setBgMovingRight(true);
-                    bg.subBgX(bg.getRatio() * 2);
+                    bg.subBgX(2);
 
 
     //                 플레이어 이외의 물체나 몬스터들
     //                if(!p1.getVel().isMovingLeft()){
-                    p1.moveObjectRight(collisonCheckX);
+//                    p1.moveObjectRight(collisonCheckX);
     //                }
-                    if (!p2.getVel().isMovingLeft() && !p2.isDead()) {
-                        p2.moveObjectRight(collisonCheckX);
-                    }
+                    p2.moveObjectRight(collisonCheckX);
+
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+
                 }
-                if (p1.getX() > 0) {
+                else if (p1.getX() > 0) {
 //                    collisonCheckX[p1.getX() + 38] = 0;
 //                    collisonCheckX[p1.getX() + 39] = 0;
 //                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 40] = -1;
@@ -965,41 +946,31 @@ public class GameUtil {
                 log.debug("p1 go right");
                 if ((smallX >= (canvasWidth - 700)+10000) && bg.getBg_x() < bg.getBg_xMax() && !bg.isBgMovingLeft()) { //배경화면 왼쪽으로 이동
                     bg.setBgMovingLeft(true);
-                    bg.addBgX(bg.getRatio() * 2);
+                    bg.addBgX(2);
 
                     // 플레이어 이외의 물체나 몬스터들
 //                if(!p1.getVel().isMovingRight()){
-                    p1.moveObjectLeft(collisonCheckX);
+//                    p1.moveObjectLeft(collisonCheckX);
 //                }
-                    if (!p2.getVel().isMovingRight() && !p2.isDead()) {
-                        p2.moveObjectLeft(collisonCheckX);
-                    }
+                    p2.moveObjectLeft(collisonCheckX);
+
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
+
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p1.getX()-10000 < canvasWidth - p1.getCanvasLength()) {//canvas_width
+                else if (p1.getX()-10000 < canvasWidth - p1.getCanvasLength()) {//canvas_width
 //                    collisonCheckX[p1.getX() + 40] = -1;
 //                    collisonCheckX[p1.getX() + 41] = -1;
 //                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 39] = 0;
@@ -1025,41 +996,29 @@ public class GameUtil {
                 log.debug("p1 go right");
                 if ((smallX >= (canvasWidth - 700)) && bg.getBg_x() < bg.getBg_xMax() && !bg.isBgMovingLeft()) { //배경화면 왼쪽으로 이동
                     bg.setBgMovingLeft(true);
-                    bg.addBgX(bg.getRatio() * 2);
+                    bg.addBgX( 2);
 
                     // 플레이어 이외의 물체나 몬스터들
 //                if(!p1.getVel().isMovingRight()){
-                    p1.moveObjectLeft(collisonCheckX);
+//                    p1.moveObjectLeft(collisonCheckX);
 //                }
-                    if (!p2.getVel().isMovingRight() && !p2.isDead()) {
-                        p2.moveObjectLeft(collisonCheckX);
-                    }
+                    p2.moveObjectLeft(collisonCheckX);
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p1.getX() < canvasWidth - p1.getCanvasLength()) {//canvas_width
+                else if (p1.getX() < canvasWidth - p1.getCanvasLength()) {//canvas_width
 //                    collisonCheckX[p1.getX() + 40] = -1;
 //                    collisonCheckX[p1.getX() + 41] = -1;
 //                    collisonCheckX[p1.getX() + p1.getCanvasLength() - 39] = 0;
@@ -1223,42 +1182,30 @@ public class GameUtil {
                 log.debug("p2 go left");
                 if ((bigX-10000 <= 800) && bg.getBg_x() > 0 && !bg.isBgMovingRight()) { //배경화면 오른쪽으로 이동
                     bg.setBgMovingRight(true);
-                    bg.subBgX(bg.getRatio() * 2);
+                    bg.subBgX(2);
 
 
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!p1.getVel().isMovingLeft() && !p1.isDead()) {
-                        p1.moveObjectRight(collisonCheckX);
-                    }
+                    p1.moveObjectRight(collisonCheckX);
 //                if(!p2.getVel().isMovingLeft()){
-                    p2.moveObjectRight(collisonCheckX);
+//                    p2.moveObjectRight(collisonCheckX);
 //                }
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p2.getX()-10000 > 0) {
+                else if (p2.getX()-10000 > 0) {
 //                    collisonCheckX[p2.getX() + 38] = 0;
 //                    collisonCheckX[p2.getX() + 39] = 0;
 //                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 40] = -1;
@@ -1284,42 +1231,30 @@ public class GameUtil {
                 log.debug("p2 go left");
                 if ((bigX <= 800) && bg.getBg_x() > 0 && !bg.isBgMovingRight()) { //배경화면 오른쪽으로 이동
                     bg.setBgMovingRight(true);
-                    bg.subBgX(bg.getRatio() * 2);
+                    bg.subBgX(2);
 
 
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!p1.getVel().isMovingLeft() && !p1.isDead()) {
-                        p1.moveObjectRight(collisonCheckX);
-                    }
+                    p1.moveObjectRight(collisonCheckX);
 //                if(!p2.getVel().isMovingLeft()){
-                    p2.moveObjectRight(collisonCheckX);
+//                    p2.moveObjectRight(collisonCheckX);
 //                }
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectRight(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectRight(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectRight(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectRight(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectRight(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p2.getX() > 0) {
+                else if (p2.getX() > 0) {
 //                    collisonCheckX[p2.getX() + 38] = 0;
 //                    collisonCheckX[p2.getX() + 39] = 0;
 //                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 40] = -1;
@@ -1346,41 +1281,29 @@ public class GameUtil {
                 log.debug("p1 go right");
                 if ((smallX >= (canvasWidth - 700)+10000) && bg.getBg_x() < bg.getBg_xMax() && !bg.isBgMovingLeft()) { //배경화면 왼쪽으로 이동
                     bg.setBgMovingLeft(true);
-                    bg.addBgX(bg.getRatio() * 2);
+                    bg.addBgX(2);
 
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!p1.getVel().isMovingRight() && !p1.isDead()) {
-                        p1.moveObjectLeft(collisonCheckX);
-                    }
+                    p1.moveObjectLeft(collisonCheckX);
 //                if(!p2.getVel().isMovingRight()){
-                    p2.moveObjectLeft(collisonCheckX);
+//                    p2.moveObjectLeft(collisonCheckX);
 //                }
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p2.getX() -10000< canvasWidth - p2.getCanvasLength()) {
+                else if (p2.getX() -10000< canvasWidth - p2.getCanvasLength()) {
 //                    collisonCheckX[p2.getX() + 40] = -1;
 //                    collisonCheckX[p2.getX() + 41] = -1;
 //                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 39] = 0;
@@ -1406,41 +1329,29 @@ public class GameUtil {
                 log.debug("p1 go right");
                 if ((smallX >= (canvasWidth - 700)) && (bg.getBg_x() < bg.getBg_xMax()) && !bg.isBgMovingLeft()) { //배경화면 왼쪽으로 이동
                     bg.setBgMovingLeft(true);
-                    bg.addBgX(bg.getRatio() * 2);
+                    bg.addBgX(2);
 
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!p1.getVel().isMovingRight() && !p1.isDead()) {
-                        p1.moveObjectLeft(collisonCheckX);
-                    }
+                    p1.moveObjectLeft(collisonCheckX);
 //                if(!p2.getVel().isMovingRight()){
-                    p2.moveObjectLeft(collisonCheckX);
+//                    p2.moveObjectLeft(collisonCheckX);
 //                }
                     // 플레이어 이외의 물체나 몬스터들
-                    if (!z.getStuckedZombieMap().get(0).isDead()) {
-                        z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getStuckedZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getStuckedZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                     for (int i = 0; i < z.getNormalZombieMap().size(); i++) {
-                        if (!z.getNormalZombieMap().get(i).isDead()) {
-                            z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getNormalZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getNormalZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-                        if (!z.getRunningZombieMap().get(i).isDead()) {
-                            z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getRunningZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getRunningZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
 
                     for (int i = 0; i < z.getCrawlingZombieMap().size(); i++) {
-                        if (!z.getCrawlingZombieMap().get(i).isDead()) {
-                            z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
-                        }
+                        z.getCrawlingZombieMap().get(i).moveObjectLeft(collisonCheckX, z.getCrawlingZombieMap().get(i).getStageNum(), room.getCurrentStageNum());
                     }
-                    if (!z.getBossZombieMap().get(0).isDead()) {
-                        z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
-                    }
+                    z.getBossZombieMap().get(0).moveObjectLeft(collisonCheckX, z.getBossZombieMap().get(0).getStageNum(), room.getCurrentStageNum());
                 }
-                if (p2.getX() < canvasWidth - p2.getCanvasLength()) {
+                else if (p2.getX() < canvasWidth - p2.getCanvasLength()) {
 //                    collisonCheckX[p2.getX() + 40] = -1;
 //                    collisonCheckX[p2.getX() + 41] = -1;
 //                    collisonCheckX[p2.getX() + p2.getCanvasLength() - 39] = 0;
@@ -1965,7 +1876,6 @@ public class GameUtil {
                     player.getVel().setInteraction(false);
                 }
                 // 공격하고 있는지 여부
-
                 break;
         }
     }
