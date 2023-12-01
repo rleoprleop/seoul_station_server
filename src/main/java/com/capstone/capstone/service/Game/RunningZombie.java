@@ -65,8 +65,8 @@ public class RunningZombie extends NormalZombie{
                 this.getVel().setAttacking(false);
                 this.setAttackDone(true);
                 this.setAttackRandomNum((int) Math.floor(Math.random() * 10)); // 0~9 정수 난수 발생
-
                 p1.setGrabbed(false);
+                p2.setInteractionPressCount(0);
 
                 if (p1.getVel().isLookingRight() == true) { //플레이어가 왼쪽에서 잡혔을 경우
                     p1.setX(this.getX() - this.getCanvasLength() - 20);
@@ -97,6 +97,7 @@ public class RunningZombie extends NormalZombie{
                 this.setAttackRandomNum((int) Math.floor(Math.random() * 10)); // 0~9 정수 난수 발생
 
                 p2.setGrabbed(false);
+                p1.setInteractionPressCount(0);
 
                 if (p2.getVel().isLookingRight()) { //플레이어가 왼쪽에서 잡혔을 경우
                     p2.setX(this.getX() - this.getCanvasLength() - 20);
