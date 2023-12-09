@@ -57,6 +57,7 @@ public class RunningZombie extends NormalZombie{
             }
             log.info("{}",(Math.abs(p2.getX() - p1.getX())));
             if ((Math.abs(p2.getX() - p1.getX()) < 70 && p2.getInteractionPressCount() >= 150 ) || p1.isDead() == true) { //p2가 풀어준 경우이거나, p1이 죽었을 때
+                log.info("p1 is dead");
                 this.grabbing = false;
                 //몬스터 공격 정보 초기화
                 this.grabWaitCount=0;
@@ -68,6 +69,7 @@ public class RunningZombie extends NormalZombie{
                 p1.setGrabbed(false);
                 p2.setInteractionPressCount(0);
 
+                log.info("{}, {}, {}, ",getVel().isAttacking(), isAttackDone());
                 if (p1.getVel().isLookingRight() == true) { //플레이어가 왼쪽에서 잡혔을 경우
                     p1.setX(this.getX() - this.getCanvasLength() - 20);
                     p1.getAttackBox().setPosition_x(p1.getX() + p1.getCanvasLength() / 2);
@@ -87,6 +89,7 @@ public class RunningZombie extends NormalZombie{
             }
             log.info("{}",(Math.abs(p2.getX() - p1.getX())));
             if ((Math.abs(p2.getX() - p1.getX()) < 70 && p1.getInteractionPressCount() >= 150) || p2.isDead() == true) { //p1이 풀어준 경우이거나, p2가 죽었을 때
+                log.info("p2 is dead");
                 this.grabbing = false;
                 //몬스터 공격 정보 초기화
                 this.grabWaitCount=0;
@@ -98,7 +101,7 @@ public class RunningZombie extends NormalZombie{
 
                 p2.setGrabbed(false);
                 p1.setInteractionPressCount(0);
-
+                log.info("{}, {}, {}, ",getVel().isAttacking(), isAttackDone());
                 if (p2.getVel().isLookingRight()) { //플레이어가 왼쪽에서 잡혔을 경우
                     p2.setX(this.getX() - this.getCanvasLength() - 20);
                     p2.getAttackBox().setPosition_x(p2.getX() + p2.getCanvasLength() / 2);
@@ -136,9 +139,9 @@ public class RunningZombie extends NormalZombie{
         }
 
 
-        if (this.getAttackRandomNum() >= 6 && this.grabbing == false) {// 9, 8, 7, 6 -> 일반 공격
+        else if (this.getAttackRandomNum() >= 6 && this.grabbing == false) {// 9, 8, 7, 6 -> 일반 공격
             log.info("normal attack================");
-            log.info("{}, {}, {}", getWaitCount(), getAttackBox().getAtkTimer(), getAttackCount());
+            log.info("{}, {}, {}, {}", getWaitCount(), getAttackBox().getAtkTimer(), getAttackCount(), getAttackRandomNum());
             if (this.getVel().isLookingRight() == true) { // 몬스터가 오른쪽 보고있는 경우
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 120, 40프레임 소모
                     this.setAttackDone(false);
@@ -276,7 +279,7 @@ public class RunningZombie extends NormalZombie{
 
         else if (this.getAttackRandomNum() < 6 && this.grabbing == false) { // 5, 4, 3, 2, 1, 0 -> 잡기 공격
             log.info("grab======================");
-            log.info("{}, {}, {}", getWaitCount(), getAttackBox().getAtkTimer(), getAttackCount());
+            log.info("{}, {}, {}, {}", getWaitCount(), getAttackBox().getAtkTimer(), getAttackCount(), getAttackRandomNum());
             if (this.getVel().isLookingRight() == true) { // 몬스터가 오른쪽 보고있는 경우
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 120, 40프레임 소모
                     this.setAttackDone(false);
@@ -378,6 +381,7 @@ public class RunningZombie extends NormalZombie{
 
     public void move(int bigX, int smallX, int[] collisonCheckX, int currentStageNum) {
         log.info("move===========");
+        log.info("getX: {}, getCanvasLength: {}, bigX: {}, smallX: {}, getX_detectLeft: {}, getX_detectRight: {}",getX(),getCanvasLength(), bigX, smallX, getX_detectLeft(), getX_detectRight());
 
         //몹의 공격 범위 갱신
         this.setX_detectLeft(this.getX() - 150);
@@ -450,7 +454,7 @@ public class RunningZombie extends NormalZombie{
                 }
             }
 
-            else if((this.getX() + 50 < this.xMax_left) || (this.xMax_right < this.getX() + this.getCanvasLength() - 50)) {//지정된 구역을 벗어난 경우
+            else if((this.getX() + 50 <= this.xMax_left) || (this.xMax_right <= this.getX() + this.getCanvasLength() - 50)) {//지정된 구역을 벗어난 경우
                 log.info("5");
                 this.running = false;
                 this.comeBackToPosition(collisonCheckX);
@@ -568,7 +572,7 @@ public class RunningZombie extends NormalZombie{
         //RunningZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
             if (this.getVel().isMoving() == false) {
-                log.info("animation {}, {}", grabbing, getVel().isAttacking());
+                log.info("animation {}, {}, {}", grabbing, getVel().isAttacking(), isAttackDone());
                 //플레이어가 해당 몬스터의 공격을 막았을 경우
                 if (this.isStunned() == true) {
                     this.setAttackFrame(0);
