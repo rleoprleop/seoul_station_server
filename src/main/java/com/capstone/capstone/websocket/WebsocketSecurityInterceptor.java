@@ -41,12 +41,13 @@ public class WebsocketSecurityInterceptor implements ChannelInterceptor, Applica
             String bearer=headerAccessor.getFirstNativeHeader("Authorization");
             String token = jwtTokenProvider.getTokenFromHeader(bearer);
             System.out.println("token: "+token);
-            log.info("header: {}, {}",headerAccessor.getFirstNativeHeader("WaitRoomId"),headerAccessor.getFirstNativeHeader("UserId"),headerAccessor.getSessionId());
-            webSocketService.createGame(headerAccessor.getFirstNativeHeader("WaitRoomId"),headerAccessor.getFirstNativeHeader("UserId"),headerAccessor.getSessionId());
             if(!jwtTokenProvider.validateToken(token)){
                 System.out.println("error!!");
                 throw new MessageDeliveryException("error authorization");
             }
+            log.info("header: {}, {}",headerAccessor.getFirstNativeHeader("WaitRoomId"),headerAccessor.getFirstNativeHeader("UserId"),headerAccessor.getSessionId());
+            webSocketService.createGame(headerAccessor.getFirstNativeHeader("WaitRoomId"),headerAccessor.getFirstNativeHeader("UserId"),headerAccessor.getSessionId());
+
             /*UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken()
             // accessor에 등록
             accessor.setUser(authentication);*/

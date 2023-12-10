@@ -1,7 +1,8 @@
 package com.capstone.capstone.controller;
 
 import com.capstone.capstone.dto.JoinWaitRoomRequestDTO;
-import com.capstone.capstone.service.RoomService;
+//import com.capstone.capstone.service.RoomService;
+import com.capstone.capstone.service.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WaitRoomController {
 
-    private final RoomService roomService;
+    private final WebSocketService webSocketService;
     /**
      * JoinWaitRoom
      * 참여 가능한 방 있으면 그 방 참여, 없으면 방 생성. 그 방의 id를 return.
@@ -25,12 +26,12 @@ public class WaitRoomController {
      */
     @PostMapping("/waitroom/create")
     public ResponseEntity JoinWaitRoom(@RequestBody JoinWaitRoomRequestDTO dto) {//UserId
-        Map<String, Object> result=roomService.getRoomIdService(dto);
+        Map<String, Object> result= webSocketService.getRoomIdService(dto);
         return ResponseEntity.ok().body(result);//UserId, waitRoomId
     }
     @PostMapping("/waitroom/code")
     public ResponseEntity GetCode(@RequestBody JoinWaitRoomRequestDTO dto) {//UserId
-        Map<String, Object> result=roomService.getRoomIdService(dto);
+        Map<String, Object> result=webSocketService.getRoomIdService(dto);
         return ResponseEntity.ok().body(result);//code
     }
 }
