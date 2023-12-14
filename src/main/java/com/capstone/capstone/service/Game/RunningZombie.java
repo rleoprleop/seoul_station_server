@@ -56,7 +56,7 @@ public class RunningZombie extends NormalZombie{
                 p2.addInteractionPressCount(1);
             }
             log.info("{}",(Math.abs(p2.getX() - p1.getX())));
-            if ((Math.abs(p2.getX() - p1.getX()) < 70 && p2.getInteractionPressCount() >= 150 ) || p1.isDead() == true) { //p2가 풀어준 경우이거나, p1이 죽었을 때
+            if ((Math.abs(p2.getX() - p1.getX()) < 70 && p2.getInteractionPressCount() >= 10 ) || p1.isDead() == true) { //p2가 풀어준 경우이거나, p1이 죽었을 때
                 log.info("p1 is dead");
                 this.grabbing = false;
                 //몬스터 공격 정보 초기화
@@ -88,7 +88,7 @@ public class RunningZombie extends NormalZombie{
                 p1.addInteractionPressCount(1);
             }
             log.info("{}",(Math.abs(p2.getX() - p1.getX())));
-            if ((Math.abs(p2.getX() - p1.getX()) < 70 && p1.getInteractionPressCount() >= 150) || p2.isDead() == true) { //p1이 풀어준 경우이거나, p2가 죽었을 때
+            if ((Math.abs(p2.getX() - p1.getX()) < 70 && p1.getInteractionPressCount() >= 10) || p2.isDead() == true) { //p1이 풀어준 경우이거나, p2가 죽었을 때
                 log.info("p2 is dead");
                 this.grabbing = false;
                 //몬스터 공격 정보 초기화

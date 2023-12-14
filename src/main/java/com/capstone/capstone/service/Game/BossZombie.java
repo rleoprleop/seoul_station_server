@@ -440,7 +440,7 @@ public class BossZombie extends NormalZombie{
                                 }
                             }
 
-                            if (collisonCheckX[this.getAttackBox().getPosition_x() + this.getAttackBox().getAtkTimer()] == 0) {
+                            if (collisonCheckX[this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer()] == 0) {
                                 if (p1.getX() < this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() && this.getAttackBox().getPosition_x() - this.getAttackBox().getAtkTimer() < p1.getX() + p1.getCanvasLength() && this.blockStayedP1 == false) {
                                     p1.setDamaged(true);
                                 }
