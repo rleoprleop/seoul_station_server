@@ -235,10 +235,6 @@ public class BossZombie extends NormalZombie{
             this.moveWaitCount++;
             return this.moveRandNum;
         }
-        else if (this.moveWaitCount == 60) {
-            this.moveWaitCount = 0;
-            return (int) Math.floor(Math.random() * 10); //0~9 사이 난수 발생
-        }
         else {
             this.moveWaitCount = 0;
             return (int) Math.floor(Math.random() * 10); //0~9 사이 난수 발생
