@@ -567,7 +567,7 @@ public class RunningZombie extends NormalZombie{
 //        return collisonCheckX;
     }
 
-    public void updateAnimation(int currentStageNum) {
+    public void updateAnimation(int currentStageNum, Player p1, Player p2) {
         this.setHitCheck(false);
         //RunningZombie 애니메이션 변수
         if (this.isDead() == false && this.stageNum == currentStageNum) {
@@ -630,12 +630,17 @@ public class RunningZombie extends NormalZombie{
             }
         }
         else if (this.isDead() == true) {
+
             if (this.deathCount == 30 && this.deathCut < this.deathLoop) {
                 this.deathCount = 0;
                 this.deathCut++;
             }
             else if (this.deathCount < 30) {
                 this.deathCount++;
+            }
+            if (this.deathCut == 1){
+                p1.setGrabbed(false);
+                p2.setGrabbed(false);
             }
         }
     }
