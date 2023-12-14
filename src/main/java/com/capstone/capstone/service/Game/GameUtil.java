@@ -391,7 +391,7 @@ public class GameUtil {
         }
 
         for (int i = 0; i < z.getRunningZombieMap().size(); i++) {
-            z.getRunningZombieMap().get(i).updateAnimation(room.getCurrentStageNum());
+            z.getRunningZombieMap().get(i).updateAnimation(room.getCurrentStageNum(),p1,p2);
 
             if (((z.getRunningZombieMap().get(i).getVel().isAttacking() == true || z.getRunningZombieMap().get(i).isAttackDone() == false) && z.getRunningZombieMap().get(i).getStageNum() == room.getCurrentStageNum())) {
                 z.getRunningZombieMap().get(i).zombieAttack(p1, p2, collisonCheckX);
