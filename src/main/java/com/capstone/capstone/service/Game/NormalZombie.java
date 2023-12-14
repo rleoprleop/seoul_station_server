@@ -73,7 +73,7 @@ public class NormalZombie extends Creature{
     }
 
     public void comeBackToPosition(int[] collisonCheckX) {
-        log.info("come back to Position ==========================");
+        log.debug("come back to Position ==========================");
         getVel().setMoving(true);
         if(getX() < (xMax_left + xMax_right) / 2) { //왼쪽으로 벗어난 경우
             if (getX() != (xMax_left + xMax_right) / 2) { //가운데로 올 때까지 이동

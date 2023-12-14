@@ -127,12 +127,12 @@ public class CrawlingZombie extends NormalZombie{
     public void zombieAttack(Player p1, Player p2, int[] collisonCheckX) {
         this.setAttackDone(false);
         this.checkBigXSmallX(p1, p2);
-        log.info("bigX: {}, rangedAttack_left: {}, smallX: {}, rangedAttack_right: {}, x_attackRight: {}, x_AttackLeft: {}",bigX,rangedAttack_left,smallX,rangedAttack_right, getX_attackRight(), getX_attackLeft());
+        log.debug("bigX: {}, rangedAttack_left: {}, smallX: {}, rangedAttack_right: {}, x_attackRight: {}, x_AttackLeft: {}",bigX,rangedAttack_left,smallX,rangedAttack_right, getX_attackRight(), getX_attackLeft());
         if ((this.bigX >= this.rangedAttack_left && this.bigX <= this.getX() + 100) || this.rangedAttackDone == false) { //왼쪽으로 공격 하는 경우
             this.getVel().setLookingRight(false);
             //원거리 공격
             if ((this.bigX >= this.rangedAttack_left && this.bigX < this.getX_attackLeft()) || this.rangedAttackDone == false) {
-                log.info("long range attack L");
+                log.debug("long range attack L");
                 this.rangedAttackDone = false;
                 this.spitting = true;
                 if (this.rangedAttackWaitCount < 150 && this.rangedAttackWaitCount != 60) {
@@ -168,7 +168,7 @@ public class CrawlingZombie extends NormalZombie{
             }
             //근거리 공격
             else if (this.getX_attackLeft() <= this.bigX && this.bigX <= this.getX() + 100 && this.rangedAttackDone == true) {
-                log.info("close range attack L");
+                log.debug("close range attack L");
                 this.spitting = false;
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //왼쪽 공격 진행중
                     this.setAttackDone(false);
@@ -239,7 +239,7 @@ public class CrawlingZombie extends NormalZombie{
             this.getVel().setLookingRight(true);
             //원거리 공격
             if ((this.getX_attackRight() < this.smallX && this.smallX <= this.rangedAttack_right) || this.rangedAttackDone == false) {
-                log.info("long range attack R");
+                log.debug("long range attack R");
                 this.setAttackDone(false);
                 this.rangedAttackDone = false;
                 this.spitting = true;
@@ -276,10 +276,10 @@ public class CrawlingZombie extends NormalZombie{
             }
             //근거리 공격
             else if (this.getX() + 100 <= this.smallX && this.smallX <= this.getX_attackRight() && this.rangedAttackDone == true) {
-                log.info("close range attack R");
+                log.debug("close range attack R");
                 this.spitting = false;
                 if (this.getAttackBox().getAtkTimer() <= this.getAttackBox().getWidth()) { //오른쪽 공격 진행중. 공격범위 -> 120, 40프레임 소모
-                    log.info("========");
+                    log.debug("========");
                     this.setAttackDone(false);
                     //공격 상자 늘리기 전에 플레이어들의 방어 확인
                     if (p1.getVel().isBlocking() == true && p1.getVel().isLookingRight() == false && (this.getAttackBox().getPosition_x() + this.getAttackBox().getAtkTimer() + 6) >= p1.getBlockBox().getX_left()) {
@@ -349,7 +349,7 @@ public class CrawlingZombie extends NormalZombie{
     }
 
     public void move(int bigX, int smallX,int[]  collisonCheckX, int currentStageNum, Player p1, Player p2) {
-        log.info("crawling move");
+        log.debug("crawling move");
         this.checkBigXSmallX(p1, p2);
         this.rangedAttack_left = this.getX() - 400;
         this.rangedAttack_right = this.getX() + this.getCanvasLength() + 400;
