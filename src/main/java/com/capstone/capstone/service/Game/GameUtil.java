@@ -131,23 +131,23 @@ public class GameUtil {
 
 
         //stage5
-        RunningZombie rz1 = new RunningZombie(1000, 620, 500, 500, 200, 3);
+        RunningZombie rz1 = new RunningZombie(900, 620, 500, 500, 200, 3);
         rz1.setLoops(4, 4, 5, 6);
-        rz1.setFixedRange(700, 1300);
+        rz1.setFixedRange(600, 1200);
         rz1.setStunLoop(3);
         rz1.setSfxIndex(0);
         rz1.setStageNum(5);
 
-        RunningZombie rz2 = new RunningZombie(2500, 620, 500, 500, 200, 3);
+        RunningZombie rz2 = new RunningZombie(1800, 620, 500, 500, 200, 3);
         rz2.setLoops(4, 4, 5, 6);
-        rz2.setFixedRange(2200, 2800);
+        rz2.setFixedRange(1500, 2100);
         rz2.setStunLoop(3);
         rz2.setSfxIndex(1);
         rz2.setStageNum(5);
 
-        RunningZombie rz3 = new RunningZombie(4000, 620, 500, 500, 200, 3);
+        RunningZombie rz3 = new RunningZombie(2700, 620, 500, 500, 200, 3);
         rz3.setLoops(4, 4, 5, 6);
-        rz3.setFixedRange(3700, 4300);
+        rz3.setFixedRange(2400, 3000);
         rz3.setStunLoop(3);
         rz3.setSfxIndex(2);
         rz3.setStageNum(5);
