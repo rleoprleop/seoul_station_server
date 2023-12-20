@@ -56,7 +56,7 @@ public class NormalZombie extends Creature{
         stunLoop = 0;
         waitCount = 0;
         deathCount = 0;
-        deathLoop = 0;
+        deathLoop = 8;
         deathCut = 0;
         deathFrame = 0;
         stageNum = 1;
