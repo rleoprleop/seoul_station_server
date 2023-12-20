@@ -15,7 +15,7 @@ public class BackGround {
     private boolean bgMovingRight;
     private boolean bgMovingLeft;
     private int stageNum;
-    private int[] arr_bgImg_width= {5760, 11520, 11520, 11520, 5760, 7680, 9600};
+    private int[] arr_bgImg_width= {5760, 11520, 11520, 11520, 5760, 7680, 7680};
 
     public BackGround(){
         bg_length=1920;
