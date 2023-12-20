@@ -22,7 +22,7 @@ public class Room {
         backGround=bg;
         checkXMap=cX;
         time=System.currentTimeMillis();
-        currentStageNum=4;
+        currentStageNum=0;
     }
     public void addCurrentStageNum(int i){
         currentStageNum+=i;
